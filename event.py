@@ -41,7 +41,7 @@ class Event_enums:
 class Event:
     def __init__(self, string):
 
-        self._relay = string.lower().contains("4x")
+        self._relay = ("4x" in string.lower())
 
         self._stroke = self.find_stroke(string)
             
@@ -59,44 +59,91 @@ class Event:
     def relay(self):
         return self._relay
     
+    def to_string(self):
+        return self._distance
 
-    def find_stroke(string):
-        if string.lower().contains("butterfly") or string.lower().contains("fjäril"):
-            print("Butterfly found")
+    def find_stroke(self, string):
+        if ("butterfly" in string.lower()) or ("fjäril" in string.lower()):
             return Stroke_enum.FLY
 
-        elif string.lower().contains("backstroke") or string.lower().contains("ryggsim"):
-            print("Backstroke found")
+        elif ("backstroke" in string.lower()) or ("ryggsim" in string.lower()):
             return Stroke_enum.BACK
         
-        elif string.lower().contains("breaststroke") or string.lower().contains("bröstsim"):
-            print("Breaststroke found")
+        elif ("breaststroke" in string.lower()) or ("bröstsim" in string.lower()):
             return Stroke_enum.BREAST
         
-        elif string.lower().contains("freestyle") or string.lower().contains("frisim"):
-            print("Freestyle found") 
+        elif ("freestyle" in string.lower()) or ("frisim" in string.lower()):
             return Stroke_enum.FREE
         
-        elif string.lower().contains("medley"):
-            print("Medley found")
+        elif "medley" in string.lower():
             return Stroke_enum.MEDLEY
         
         else:
-            print("Stroke not identified")
             return None
         
-    def find_distance(string, stroke, relay):
+    def find_distance(self, string, stroke, relay):
         match stroke:
             case Stroke_enum.FLY:
-                return None
+
+                if "50" in string:
+                    return Event_enums._50_BUTTERFLY
+                
+                if "100" in string:
+                    return Event_enums._100_BUTTERFLY
+                
+                if "200" in string:
+                    return Event_enums._200_BUTTERFLY
+                
             case Stroke_enum.BACK:
-                return None
+                
+                if "50" in string:
+                    return Event_enums._50_BACKSTROKE
+                
+                if "100" in string:
+                    return Event_enums._100_BACKSTROKE
+                
+                if "200" in string:
+                    return Event_enums._200_BACKSTROKE
+                
             case Stroke_enum.BREAST:
-                return None
+                
+                if "50" in string:
+                    return Event_enums._50_BREASTSTROKE
+                
+                if "100" in string:
+                    return Event_enums._100_BREASTSTROKE
+                
+                if "200" in string:
+                    return Event_enums._200_BREASTSTROKE
+                
             case Stroke_enum.FREE:
-                return None
+                if "50" in string:
+                    if "1500" in string:
+                        return Event_enums._1500_FREESTYLE
+                    
+                    return Event_enums._50_FREESTYLE
+                
+                if "100" in string:
+                    return Event_enums._100_FREESTYLE
+                
+                if "200" in string:
+                    return Event_enums._200_FREESTYLE
+                
+                if "400" in string:
+                    return Event_enums._400_FREESTYLE
+                
+                if "800" in string:
+                    return Event_enums._800_FREESTYLE
+                
             case Stroke_enum.MEDLEY:
-                return None
+                if "100" in string:
+                    return Event_enums._100_INDIVIDUAL_MEDLEY
+
+                if "200" in string:
+                    return Event_enums._200_INDIVIDUAL_MEDLEY
+
+                if "400" in string:
+                    return Event_enums._400_INDIVIDUAL_MEDLEY
 
             # If an exact match is not confirmed, this last case will be used if provided
             case _:

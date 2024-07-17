@@ -37,4 +37,4 @@ class Swimmer:
 
     def print_events(self):
         for e in self._events:
-            print("\t" + e)
+            print("\t" + e.to_string())

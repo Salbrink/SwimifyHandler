@@ -1,18 +1,17 @@
 import swimmer
-import time
+import event
+
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
-# chrome_options = Options()
-# chrome_options.add_argument("--headless=new") 
-# driver = webdriver.Chrome(options = chrome_options)
+chrome_options = Options()
+chrome_options.add_argument("--headless=new") 
+driver = webdriver.Chrome(options = chrome_options)
 
-driver = webdriver.Chrome()
+# driver = webdriver.Chrome()
 
 url = "https://live.swimify.com/competitions/sum-sim-50m-2024-2024-07-10/events/entries/1/1"
 driver.get(url)
@@ -134,7 +133,8 @@ for swimmer, swimmer_div in swimmer_div_dictionary.items():
             # Locate the p element with the specific class within the parent element
             p_element = parent_element.find_element(By.CSS_SELECTOR, 'div.MuiBox-root.css-2ijh4t > p.MuiTypography-root.MuiTypography-body1.css-151uy7p')
             # Extract the text content and add it to the list
-            swimmer.add_event(p_element.text)
+            event_string = ''.join(p_element.text)
+            swimmer.add_event(event.Event(event_string))
         swimmer.print_events()
 
     except Exception as e:
