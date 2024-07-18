@@ -46,6 +46,12 @@ class Event:
         self._stroke = self.find_stroke(string)
             
         self._distance = self.find_distance(string, self._stroke, self._relay)
+
+        if(("damer" in string.lower()) or ("women" in string.lower()) or ("flickor" in string.lower())):
+            self._gender = "Damer"
+        else:
+            self._gender = "Herrar"
+
         
     @property
     def distance(self):
@@ -59,8 +65,12 @@ class Event:
     def relay(self):
         return self._relay
     
+    @property
+    def gender(self):
+        return self._gender
+    
     def to_string(self):
-        return self._distance
+        return self._distance + " " + self._gender
 
     def find_stroke(self, string):
         if ("butterfly" in string.lower()) or ("fjäril" in string.lower()):
@@ -150,3 +160,4 @@ class Event:
                 print("Distance not found")
                 return None
     
+

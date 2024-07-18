@@ -1,12 +1,13 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-driver = webdriver.Chrome()
-# chrome_options = Options()
-# chrome_options.add_argument("--headless=new") 
+chrome_options = Options()
+chrome_options.add_argument("--headless=new") 
+driver = webdriver.Chrome(chrome_options)
 
 url = "https://live.swimify.com/competitions/sum-sim-50m-2024-2024-07-10/events/entries/1/1"
 driver.get(url)
@@ -15,36 +16,58 @@ driver.get(url)
 wait = WebDriverWait(driver, 20)
 root_div = wait.until(EC.presence_of_element_located((By.ID, "root")))
 
+selector = 'div[class="MuiBox-root css-qlbhet"]'
 
-## Find all buttons
-# selector = 'button[class^="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary"][tabindex][type="button"][role="tab"][aria-selected]'
+session_divs = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)))
 
-# Wait until at least one element matching the selector is present
-# buttons = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)))
-
-# if buttons:
-#     print(f"Found {len(buttons)} buttons:")
-#     for i, button in enumerate(buttons):
-#         print("Start")
-#         print(f"Button {i + 1}: {button.get_attribute('outerHTML')}")
-#         print("Stop")
-
+# if session_divs:
+#     print(f"Found {len(session_divs)} buttons:")
+#     for i, session in enumerate(session_divs):
+#         print(f"Button {i + 1}: {session.get_attribute('outerHTML')}")
 # else:
 #     print("No buttons found")
 
-selector = 'div[class="MuiBox-root css-qlbhet"]'
+# Dictionary for session web elements
+sessions = {}
 
-sessions = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)))
+# Find and store all session elements with keys of type "session x | day h:m
+for session_div in session_divs:
+    ## Find the name strings
+    session_name_element = session_div.find_element(By.CSS_SELECTOR, 'p.MuiTypography-root.MuiTypography-body1.css-xu169k')
+    session_time_element  = session_div.find_elements(By.CSS_SELECTOR, 'p.MuiTypography-root.MuiTypography-body1.css-bxnpil')
+    
+    session_name = session_name_element.text + " | " + session_time_element[0].text + " " + session_time_element[-1].text
+    sessions[session_name] = session_div
 
-if sessions:
-    print(f"Found {len(sessions)} buttons:")
-    for i, session in enumerate(sessions):
-        print("Start")
-        print(f"Button {i + 1}: {session.get_attribute('outerHTML')}")
-        print("Stop")
+# Dictionary for events per session
+session_events = {}
 
-else:
-    print("No buttons found")
+# For all sessions, load all events
+for session in sessions:
 
-input("Press Enter to continue...")
+    sessions[session].click()
+    time.sleep(1)
+    print(session)
+
+    try:
+        # Locate all <a> elements with the specific style
+        elements = wait.until(EC.presence_of_all_elements_located((By.XPATH, "//a[@display='flex']")))
+
+        for element in elements:
+            # Extract the time
+            start_time = element.find_element(By.CSS_SELECTOR, 'div.MuiBox-root.css-z9ki6v > p').text.strip()
+            
+            # Extract the event
+            event = element.find_element(By.CSS_SELECTOR, 'div.MuiBox-root.css-6771j6 > p').text.strip()
+            
+            # Add the extracted time and event to the list
+            session_events[session] = (start_time, event)
+
+            # Output the list of times and events
+            print("\t" + session_events[session])
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+ 
+input("Press Enter to cancel...")
 driver.quit()

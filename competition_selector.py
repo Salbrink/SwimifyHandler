@@ -46,7 +46,7 @@ else:
 
 # Function to click on a competition based on its index
 def click_competition_by_index(index):
-    if 0 <= index < len(clickable_elements):
+    if 0 <= index - 1 < len(clickable_elements):
         clickable_elements[index - 1].click()
         print(f"Clicked on competition {index}: {competition_titles[index - 1]}")
     else:

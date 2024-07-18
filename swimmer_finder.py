@@ -19,21 +19,6 @@ driver.get(url)
 # Wait until the button element is present
 wait = WebDriverWait(driver, 20)
 
-# # Find all buttons
-# selector = 'button[class^="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary"][tabindex][type="button"][role="tab"][aria-selected]'
-
-# # Wait until at least one element matching the selector is present
-# buttons = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)))
-
-# if buttons:
-#     print(f"Found {len(buttons)} buttons:")
-#     for i, button in enumerate(buttons):  
-#         print(f"Button {i + 1}: {button.get_attribute('outerHTML')}")
-
-# else:
-#     print("No buttons found")
-
-
 # Enter the "Swimmers" menu to locate the clubs 
 try:
     # Wait for the button to be clickable
@@ -89,7 +74,6 @@ try:
     selected_club = click_club_by_index(index_to_click)
 except ValueError:
     print("Please enter a valid integer index.")
-
 
 # Dictionary to store the names and their corresponding WebElements
 swimmer_div_dictionary = {}
