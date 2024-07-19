@@ -1,4 +1,5 @@
 import time
+import event
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -9,7 +10,8 @@ chrome_options = Options()
 chrome_options.add_argument("--headless=new") 
 driver = webdriver.Chrome(chrome_options)
 
-url = "https://live.swimify.com/competitions/sum-sim-50m-2024-2024-07-10/events/entries/1/1"
+#url = "https://live.swimify.com/competitions/sum-sim-50m-2024-2024-07-10/events/entries/1/1"
+url = "https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/events/summary/1/146"
 driver.get(url)
 
 # Wait until the root element is present
@@ -19,13 +21,6 @@ root_div = wait.until(EC.presence_of_element_located((By.ID, "root")))
 selector = 'div[class="MuiBox-root css-qlbhet"]'
 
 session_divs = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)))
-
-# if session_divs:
-#     print(f"Found {len(session_divs)} buttons:")
-#     for i, session in enumerate(session_divs):
-#         print(f"Button {i + 1}: {session.get_attribute('outerHTML')}")
-# else:
-#     print("No buttons found")
 
 # Dictionary for session web elements
 sessions = {}
@@ -41,6 +36,7 @@ for session_div in session_divs:
 
 # Dictionary for events per session
 session_events = {}
+session_event_lists = []
 
 # For all sessions, load all events
 for session in sessions:
@@ -48,6 +44,8 @@ for session in sessions:
     sessions[session].click()
     time.sleep(1)
     print(session)
+
+    session_event_list = []
 
     try:
         # Locate all <a> elements with the specific style
@@ -58,13 +56,16 @@ for session in sessions:
             start_time = element.find_element(By.CSS_SELECTOR, 'div.MuiBox-root.css-z9ki6v > p').text.strip()
             
             # Extract the event
-            event = element.find_element(By.CSS_SELECTOR, 'div.MuiBox-root.css-6771j6 > p').text.strip()
+            session_event = element.find_element(By.CSS_SELECTOR, 'div.MuiBox-root.css-6771j6 > p').text.strip()
             
             # Add the extracted time and event to the list
-            session_events[session] = (start_time, event)
+            session_events[session] = [start_time, session_event]
+
+            session_event_list.append(event.Event(session_event))
 
             # Output the list of times and events
-            print("\t" + session_events[session])
+            print("\t" + session_events[session][0] + " " + session_events[session][1])
+            session_event_lists.append(session_event_list)
 
     except Exception as e:
         print(f"An error occurred: {e}")

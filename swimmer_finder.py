@@ -1,5 +1,6 @@
 import swimmer
 import event
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -13,7 +14,8 @@ driver = webdriver.Chrome(options = chrome_options)
 
 # driver = webdriver.Chrome()
 
-url = "https://live.swimify.com/competitions/sum-sim-50m-2024-2024-07-10/events/entries/1/1"
+# url = "https://live.swimify.com/competitions/sum-sim-50m-2024-2024-07-10/events/entries/1/1"
+url = "https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/events/summary/1/146"
 driver.get(url)
 
 # Wait until the button element is present
@@ -98,7 +100,7 @@ for swimmer_div in swimmer_divs:
             swimmer_key = swimmer.Swimmer(first_name, last_name, selected_club)
             swimmer_div_dictionary[swimmer_key] = swimmer_div
         else:
-            print("Relays not yet handled")
+            print("\tRelays not yet handled")
 
     except Exception as e:
         print(f"Error processing name div: {e}")
@@ -107,6 +109,7 @@ for swimmer_div in swimmer_divs:
 for swimmer, swimmer_div in swimmer_div_dictionary.items():
     print(swimmer.to_string())
     swimmer_div.click()
+    time.sleep(1)
     
     try:
         # Locate all the p elements with the given class
@@ -122,7 +125,7 @@ for swimmer, swimmer_div in swimmer_div_dictionary.items():
         swimmer.print_events()
 
     except Exception as e:
-        print(f"No entries found. Error {e}")
+        print(f"\tNo entries found. Error {e}")
 
 input("Press Enter to cancel...")
 driver.quit()

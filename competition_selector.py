@@ -15,7 +15,7 @@ driver.get(url)
 
 # Wait until the root element is present
 wait = WebDriverWait(driver, 20)
-root_div = wait.until(EC.presence_of_element_located((By.ID, "root")))
+# root_div = wait.until(EC.presence_of_element_located((By.ID, "root")))
 
 # Define the CSS selector for the desired elements
 selector = 'div[class^="MuiBox-root css-"][role="article"][aria-labelledby^="competition-title-"]'
@@ -38,7 +38,7 @@ if competitions:
             competition_titles.append(title)
             
             # Assuming the clickable element is the competition container itself or a specific child element
-            clickable_element = competition  # You might need to adjust this based on actual clickable element
+            clickable_element = competition  # Might need to be adjusted based on actual clickable element
             clickable_elements.append(clickable_element)
             print(f"Competition {i + 1}: {title}")
 else:
