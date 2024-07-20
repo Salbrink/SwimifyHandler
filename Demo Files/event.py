@@ -7,9 +7,9 @@ class Stroke_enum:
     MEDLEY = 5 
 
 class Event_enums:
-    _50_BUTTERFLY  = "50m fjäril"
-    _100_BUTTERFLY = "100m fjäril"
-    _200_BUTTERFLY = "200m fjäril"
+    _50_BUTTERFLY  = "50m fjärilsim"
+    _100_BUTTERFLY = "100m fjärilsim"
+    _200_BUTTERFLY = "200m fjärilsim"
 
     _50_BACKSTROKE  = "50m ryggsim"
     _100_BACKSTROKE = "100m ryggsim"
@@ -30,7 +30,7 @@ class Event_enums:
     _200_INDIVIDUAL_MEDLEY = "200m medley"
     _400_INDIVIDUAL_MEDLEY = "400m medley"
 
-    _4x50_MEDLEY = "4X50m medley"
+    _4x50_MEDLEY = "4x50m medley"
     _4x100_MEDLEY = "4x100m medley"
 
     _4x50_FREESTYLE = "4x50m frisim"
@@ -73,7 +73,7 @@ class Event:
         return self._distance + " " + self._gender
 
     def find_stroke(self, string):
-        if ("butterfly" in string.lower()) or ("fjäril" in string.lower()):
+        if ("butterfly" in string.lower()) or ("fjärilsim" in string.lower()):
             return Stroke_enum.FLY
 
         elif ("backstroke" in string.lower()) or ("ryggsim" in string.lower()):
