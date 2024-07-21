@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import time
 
 ####______________________________________________________________________________________________________####
 
@@ -21,7 +22,7 @@ To do this, the Pyhton Selenium library is used and adapted for the purpose.
 
 
 
-def find_element(driver: webdriver, wait: WebDriverWait, selector: str, selector_type=None):
+def find_element(wait: WebDriverWait, selector: str, selector_type=None):
     ''' 
     Private method to find a specific html element in the webdrivers current state.
 
@@ -36,7 +37,7 @@ def find_element(driver: webdriver, wait: WebDriverWait, selector: str, selector
     '''
     return wait.until(EC.presence_of_element_located((selector_type, selector)))
 
-def find_all_elements(driver: webdriver, wait: WebDriverWait, selector: str, selector_type=None):
+def find_all_elements(wait: WebDriverWait, selector: str, selector_type=None):
     ''' 
     Private method to find all specific html elements in the webdrivers current state.
 
@@ -49,7 +50,39 @@ def find_all_elements(driver: webdriver, wait: WebDriverWait, selector: str, sel
     Return:
         List of WebElements with specified selector
     '''
-    return wait.until(EC.presence_of_element_located((selector_type, selector)))
+    return wait.until(EC.presence_of_all_elements_located((selector_type, selector)))
+
+def find_sub_element(parent, selector: str, selector_type=None):
+    ''' 
+    Private method to find a specific html element in a parent html element in 
+    the webdrivers current state.
+
+    Inputs:
+        parent: parent WebElement
+        wait: selenium.webdriver.support.ui.WebDriverWait object
+        selector: String object to locate html element
+        selector_type: selenium.webdriver.common.by.Literal object
+
+    Return:
+        WebElement with specified selector
+    '''
+    return parent.find_element(selector_type, selector)
+
+def find_all_sub_elements(parent, selector: str, selector_type=None):
+    ''' 
+    Private method to find all specific html elements in a parent html element in 
+    the webdrivers current state.
+
+    Inputs:
+        parent: parent WebElement
+        wait: selenium.webdriver.support.ui.WebDriverWait object
+        selector: String object to locate html element
+        selector_type: selenium.webdriver.common.by.Literal object
+
+    Return:
+        List of WebElements with specified selector
+    '''
+    return parent.find_elements(selector_type, selector)
 
 def get_all_strings(web_elements, selector: str, selector_type):
     '''
@@ -73,7 +106,7 @@ def get_all_strings(web_elements, selector: str, selector_type):
 
     ## Go through all web elements
     for web_element in web_elements:
-        
+
         ## Find specific element where string of interest is located
         specififc_element = web_element.find_element(selector_type, selector)
 

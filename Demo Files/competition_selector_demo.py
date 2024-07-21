@@ -22,6 +22,7 @@ selector = 'div[class^="MuiBox-root css-"][role="article"][aria-labelledby^="com
 
 # Wait until at least one element matching the selector is present
 competitions = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)))
+print(competitions)
 
 # Lists to store competition titles and clickable elements
 competition_titles = []
