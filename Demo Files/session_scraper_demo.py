@@ -16,7 +16,7 @@ driver.get(url)
 
 # Wait until the root element is present
 wait = WebDriverWait(driver, 20)
-root_div = wait.until(EC.presence_of_element_located((By.ID, "root")))
+# root_div = wait.until(EC.presence_of_element_located((By.ID, "root")))
 
 selector = 'div[class="MuiBox-root css-qlbhet"]'
 

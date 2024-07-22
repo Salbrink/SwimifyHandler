@@ -3,10 +3,18 @@ from selenium.webdriver.common.by import By
 import driver_handler
 import html_renderer
 
-##____ Set up the Chrome WebDriver ____##
-driver, wait = driver_handler.setup_driver("https://live.swimify.com", 20)
 
-##____ Choose competition seciton depending on input ____##
+def run(url):
+    ##____ Set up the Chrome WebDriver ____##
+    driver, wait = driver_handler.setup_driver(url, 20)
+    section, index = select_section(wait)
+    select_competition(wait, section, index)
+
+    ##________##
+    input("\nPress Enter to cancel...")
+    driver.quit()
+
+##____ Choose competition section depending on input ____##
 def choice_index(list_of_choices):
     choice_index = -1
     last_index   = len(list_of_choices) - 1
@@ -16,16 +24,16 @@ def choice_index(list_of_choices):
                 print("Not a valid input\n\n") 
                 choice_index = -1
             else: 
-                choice_index = int(input("Enter index to click: ")) - 1
+                choice_index = int(input("\nEnter index to click: ")) - 1
         except ValueError:
-            print("Please enter a valid integer index.\n\n")
+            print("\nPlease enter a valid integer index.\n")
     
 
-    print(f'Selected {choice_index + 1}: {list_of_choices[choice_index]}')
+    print(f'\nSelected {choice_index + 1}: {list_of_choices[choice_index]}\n')
     return choice_index
 
-def select_section():
-    ##____ Find sections Competitions This Week, Upcoming Competitions and Finished Competititons  ____##
+def select_section(wait):
+    ##____ Find sections "Competitions This Week", "Upcoming Competitions" and "Finished Competititons"  ____##
 
     # Define the CSS selector for section div elements
     competition_section_divs_selector = 'div[class^="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 "]'
@@ -40,18 +48,19 @@ def select_section():
     title_element_selector = 'p[class^="MuiTypography-root MuiTypography-body1 css-"]'
     title_elements = []
 
+    print("\nSelect section:")
     for i, comp_sec in enumerate(competition_section_divs):
 
         # Get and store the title string
         title_element = html_renderer.find_sub_element(comp_sec, title_element_selector, By.CSS_SELECTOR).text
         title_elements.append(title_element)
-        print(f'{i + 1} ' + title_element)
+        print(f'\t{i + 1} ' + title_element)
 
     index = choice_index(title_elements)
     selected_section = competition_section_divs[index]
     return selected_section, index + 1
 
-def select_competition(section, index):
+def select_competition(wait, section, index):
     ##____ Find all competitions in chosen section ____##
 
     # Define the CSS selector for competition clickable elements
@@ -75,8 +84,9 @@ def select_competition(section, index):
     competition_list, competition_div_map = html_renderer.get_all_strings(competitions, \
                                                 title_element_selector, By.CSS_SELECTOR)
 
+    print("\nSelect competition:")
     for i, comp_title in enumerate(competition_list):
-        print(f'{i + 1} ' + comp_title)
+        print(f'\t{i + 1} ' + comp_title)
 
     ##____ Choose competition seciton depending on input ____##
     choice = choice_index(competition_list)
@@ -86,9 +96,4 @@ def select_competition(section, index):
     competition_div_map[selected_competition].click()
 
 
-section, index = select_section()
-select_competition(section, index)
-
-##________##
-input("Press Enter to cancel...")
-driver.quit()
+run("https://live.swimify.com")

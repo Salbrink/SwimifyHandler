@@ -25,13 +25,14 @@ wait = WebDriverWait(driver, 20)
 try:
     # Wait for the button to be clickable
     wait = WebDriverWait(driver, 5)
-    button = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[.//p[contains(text(), "Swimmers")]]')))
-    
-    # Scroll into view if necessary
-    driver.execute_script("arguments[0].scrollIntoView();", button)
+    button = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[.//p[contains(text(), "Swimmers")]]'))).click()
+    time.sleep(1)
+
+    # # Scroll into view if necessary
+    # driver.execute_script("arguments[0].scrollIntoView();", button)
     
     # Click the button using JavaScript
-    driver.execute_script("arguments[0].click();", button)
+    # driver.execute_script("arguments[0].click();", button)
 
     # Dictionary to store the club names and their corresponding WebElements
     club_elements = {}

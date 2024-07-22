@@ -61,7 +61,6 @@ else:
 time.sleep(1)
 
 # Wait until the desired row is present
-wait = WebDriverWait(driver, 20)
 row_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'tr.odd td.name-column')))
 
 # Locate the <a> tag with class "view" within the specific row
