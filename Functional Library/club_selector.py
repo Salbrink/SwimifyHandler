@@ -13,7 +13,6 @@ def run(url):
     club_url = select_club(driver, wait)
 
     # Wait for closure
-    input("Press Enter to cancel...")
     driver.quit()
     return club_url
 
@@ -47,6 +46,7 @@ def select_club(driver, wait):
 
         # Locate all the parent div elements containing the club information
         club_divs = html_renderer.find_all_elements(wait, 'div.MuiBox-root.css-1eukt2p', By.CSS_SELECTOR)
+        club_divs.append(html_renderer.find_element(wait, 'div.MuiBox-root.css-1fis6zz', By.CSS_SELECTOR))
 
         # Get list of club names and key-value map with club names and clickable div elements
         club_names, club_div_map = html_renderer.get_all_strings(club_divs, \
@@ -62,9 +62,12 @@ def select_club(driver, wait):
         choice = choice_index(club_names)
         club_div_map[club_names[choice]].click()
 
-        return driver.current_url
+        print("Found Club URL: " + driver.current_url)
+
+        return club_names[choice], driver.current_url
 
     except Exception as e:
         print(f'Error: {e}')
-    
-run("https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/events/summary/1/146")
+
+## Test  
+# run("https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/events/summary/1/146")

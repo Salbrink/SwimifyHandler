@@ -12,14 +12,14 @@ import html_renderer
 
 
 def run(url, swimmer_object, event_list):
-    driver, wait = driver_handler.setup_driver(url, 20)
+    ##____ Set up the Chrome WebDriver ____##
+    driver, wait = driver_handler.setup_driver(url, 10)
     
     sc_map, lc_map = get_PB_of_swimmer_object(driver, wait, swimmer_object, event_list)
 
     print_PB(event_list, sc_map, lc_map)
 
     #________##
-    input("\nPress Enter to cancel...")
     driver.quit()
 
 def get_PB_of_swimmer_object(driver, wait, swimmer_object, event_list):
@@ -93,4 +93,5 @@ def print_PB(event_list, sc_map, lc_map):
         except KeyError:
             print("\tNo personal best for " + event_name + " LC")
 
-run("https://www.tempusopen.se/index.php?r=Swimmer", swimmer.Swimmer("Filip", "Salbrink", "Simklubben Poseidon"), ["25m fjärilsim", "1500m frisim", "100m ryggsim", "200m medley"])
+## Test
+# run("https://www.tempusopen.se/index.php?r=Swimmer", swimmer.Swimmer("Ian", "Hangård", "Simklubben Sydsim"), ["25m fjärilsim", "1500m frisim", "100m ryggsim", "200m medley"])

@@ -29,6 +29,10 @@ class Swimmer:
     def club(self, value):
         self._club = value
 
+    @property
+    def events(self):
+        return self._events
+
     def to_string(self):
         return self._first_name + " " + self._last_name + " " + self._club
     

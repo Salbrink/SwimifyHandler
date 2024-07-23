@@ -7,15 +7,15 @@ import swimmer
 import time
 
 
-def run(url):
+def run(url, club_name):
     ##____ Set up the Chrome WebDriver ____##
-    driver, wait = driver_handler.setup_driver(url, 20)
+    driver, wait = driver_handler.setup_driver(url, 5)
     
-    load_swimmers_and_events(driver, wait, "Simklubben Poseidon")
+    swimmers = load_swimmers_and_events(driver, wait, club_name)
 
     ##________##
-    input("\nPress Enter to cancel...")
     driver.quit()
+    return swimmers
 
 
 def load_swimmers_and_events(driver, wait, selected_club):
@@ -39,9 +39,12 @@ def load_swimmers_and_events(driver, wait, selected_club):
         else:
             print("\n" + swimmer_name)
             # Create new swimmer instance
-            first_name, last_name = swimmer_name.split(' ', 1)
-            swimmer_object = swimmer.Swimmer(first_name, last_name, selected_club)
-            swimmer_objects_map[swimmer_name] = swimmer_object
+            try:
+                first_name, last_name = swimmer_name.split(' ', 1)
+                swimmer_object = swimmer.Swimmer(first_name, last_name, selected_club)
+                swimmer_objects_map[swimmer_name] = swimmer_object
+            except ValueError:
+                print("Not a swimmer")
 
             swimmer_div_map[swimmer_name].click()
             time.sleep(1)
@@ -66,8 +69,8 @@ def load_swimmers_and_events(driver, wait, selected_club):
 
             except Exception as e:
                 print(f"\tNo entries found. Error {e}")
+
+    return swimmer_objects_map
         
-
-    
-
-run("https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/swimmers/clubs/206")
+## Test
+# run("https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/swimmers/clubs/206")

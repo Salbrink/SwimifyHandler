@@ -7,14 +7,12 @@ import html_renderer
 
 def run(url):
     ##____ Set up the Chrome WebDriver ____##
-    driver, wait = driver_handler.setup_driver(\
-        url, 20)
+    driver, wait = driver_handler.setup_driver(url, 20)
     
     # Run selection method
     select_session(driver, wait)
 
     # Wait for closure
-    input("Press Enter to cancel...")
     driver.quit()
 
 
@@ -83,5 +81,5 @@ def select_session(driver, wait):
         except Exception as e:
             print(f"An error occurred: {e}")
         
-    
-run("https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/events/summary/1/146")
+## Test
+# run("https://live.swimify.com/competitions/smpara-smjsm-50m-2024-2024-07-03/events/summary/1/146")

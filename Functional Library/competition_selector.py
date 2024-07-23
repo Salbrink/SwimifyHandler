@@ -8,11 +8,11 @@ def run(url):
     ##____ Set up the Chrome WebDriver ____##
     driver, wait = driver_handler.setup_driver(url, 20)
     section, index = select_section(wait)
-    select_competition(wait, section, index)
+    competition_url = select_competition(driver, wait, section, index)
 
     ##________##
-    input("\nPress Enter to cancel...")
     driver.quit()
+    return competition_url
 
 ##____ Choose competition section depending on input ____##
 def choice_index(list_of_choices):
@@ -60,7 +60,7 @@ def select_section(wait):
     selected_section = competition_section_divs[index]
     return selected_section, index + 1
 
-def select_competition(wait, section, index):
+def select_competition(driver, wait, section, index):
     ##____ Find all competitions in chosen section ____##
 
     # Define the CSS selector for competition clickable elements
@@ -95,5 +95,9 @@ def select_competition(wait, section, index):
     selected_competition = competition_list[choice]
     competition_div_map[selected_competition].click()
 
+    print("Found Competition URL: " + driver.current_url)
 
-run("https://live.swimify.com")
+    return driver.current_url
+
+## Test
+# run("https://live.swimify.com")
