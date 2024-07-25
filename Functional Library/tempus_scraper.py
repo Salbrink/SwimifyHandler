@@ -3,6 +3,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementNotInteractableException
 
 
 import time
@@ -35,10 +37,20 @@ def get_PB_of_swimmer_object(driver, wait, swimmer_object, event_list):
     club_name.send_keys(swimmer_object.club)
 
     # Press search button
-    html_renderer.find_element(wait, 'input[type="submit"][name="yt0"][value="Sök"]', By.CSS_SELECTOR).click()
+    search_button = html_renderer.find_element(wait, 'input[type="submit"][name="yt0"][value="Sök"]', By.CSS_SELECTOR)
+    try:
+        search_button.click()
+    except ElementNotInteractableException:
+        print(ElementNotInteractableException)
+    time.sleep(1)
+
 
     # Press first swimmer
-    html_renderer.find_element(wait, '//tr[@class="odd"]//a[@class="view"]', By.XPATH).click()
+    top_search = html_renderer.find_element(wait, '//tr[@class="odd"]//a[@class="view"]', By.XPATH)
+    try:
+        top_search.click()
+    except ElementNotInteractableException:
+        print(ElementNotInteractableException)
     time.sleep(1)
 
     ##____ In swimmer menu ____##
