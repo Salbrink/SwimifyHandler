@@ -47,7 +47,6 @@ def load_swimmers_and_events(driver, wait, selected_club):
                 print("Not a swimmer")
 
             swimmer_div_map[swimmer_name].click()
-            time.sleep(1)
     
             try:
                 # Locate the parent div elements with the specified class

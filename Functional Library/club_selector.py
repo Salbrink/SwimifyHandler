@@ -42,7 +42,6 @@ def select_club(driver, wait):
         
         # Click the button using JavaScript
         driver.execute_script("arguments[0].click();", button)
-        time.sleep(1)
 
         # Locate all the parent div elements containing the club information
         club_divs = html_renderer.find_all_elements(wait, 'div.MuiBox-root.css-1eukt2p', By.CSS_SELECTOR)

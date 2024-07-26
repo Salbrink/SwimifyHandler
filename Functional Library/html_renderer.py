@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import time
 
 ####______________________________________________________________________________________________________####
@@ -35,7 +36,14 @@ def find_element(wait: WebDriverWait, selector: str, selector_type=None):
     Return:
         WebElement with specified selector
     '''
-    return wait.until(EC.presence_of_element_located((selector_type, selector)))
+    try:
+        element = wait.until(EC.presence_of_element_located((selector_type, selector)))
+        return element
+    except TimeoutException as e:
+        print(f"TimeoutException: Element not found within {10} seconds.")
+        print(e.stacktrace)
+        return None
+        
 
 def find_all_elements(wait: WebDriverWait, selector: str, selector_type=None):
     ''' 
@@ -50,7 +58,13 @@ def find_all_elements(wait: WebDriverWait, selector: str, selector_type=None):
     Return:
         List of WebElements with specified selector
     '''
-    return wait.until(EC.presence_of_all_elements_located((selector_type, selector)))
+    try:
+        element = wait.until(EC.presence_of_all_elements_located((selector_type, selector)))
+        return element
+    except TimeoutException as e:
+        print(f"TimeoutException: Element not found within {10} seconds.")
+        print(e.stacktrace)
+        return None
 
 def find_sub_element(parent, selector: str, selector_type=None):
     ''' 

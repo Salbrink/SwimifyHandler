@@ -38,20 +38,14 @@ def get_PB_of_swimmer_object(driver, wait, swimmer_object, event_list):
 
     # Press search button
     search_button = html_renderer.find_element(wait, 'input[type="submit"][name="yt0"][value="Sök"]', By.CSS_SELECTOR)
-    try:
-        search_button.click()
-    except ElementNotInteractableException:
-        print(ElementNotInteractableException)
-    time.sleep(1)
-
+    search_button.click()
 
     # Press first swimmer
     top_search = html_renderer.find_element(wait, '//tr[@class="odd"]//a[@class="view"]', By.XPATH)
-    try:
-        top_search.click()
-    except ElementNotInteractableException:
-        print(ElementNotInteractableException)
-    time.sleep(1)
+    if top_search is None:
+        print("Swimmer Tempus not found")
+        return {}, {}
+    top_search.click()
 
     ##____ In swimmer menu ____##
     # Get map for short course PB's of events of interest
@@ -91,7 +85,7 @@ def search_section(wait, section_selector, section_selector_type, event_list):
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return None
+        return {}
     
 def print_PB(event_list, sc_map, lc_map):
     for event_name in event_list:
