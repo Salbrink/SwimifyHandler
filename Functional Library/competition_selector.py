@@ -3,19 +3,51 @@ from selenium.webdriver.common.by import By
 import driver_handler
 import html_renderer
 
+####______________________________________________________________________________________________________####
+
+'''
+
+The following serves as a library for initially scraping information of live.Swimify.com and from there 
+select competition from either of the sections
+
+- Competitions this week
+- Upcoming competitions
+- Finished competitions
+
+'''
+
+####______________________________________________________________________________________________________####
 
 def run(url):
+    '''
+    Demo run of class. Takes the url of the Swimify competition
+    and runs through all essential functions of class
+
+    Input:
+        url: url adress of competition
+    '''
     ##____ Set up the Chrome WebDriver ____##
     driver, wait = driver_handler.setup_driver(url, 20)
+    
     section, index = select_section(wait)
-    competition_url = select_competition(driver, wait, section, index)
+    competition_url = select_competition(driver, section, index)
 
     ##________##
     driver.quit()
     return competition_url
 
 ##____ Choose competition section depending on input ____##
-def choice_index(list_of_choices):
+def _choice_index(list_of_choices):
+    '''
+    Private method to allow interactive choice in list from 
+    terminal.
+
+    Input:
+        list_of_choices: list with found objects to choose from
+
+    Return:
+        index of choice.
+    '''
     choice_index = -1
     last_index   = len(list_of_choices) - 1
     while ((choice_index < 0) or (last_index < choice_index)):
@@ -33,6 +65,22 @@ def choice_index(list_of_choices):
     return choice_index
 
 def select_section(wait):
+    '''
+    Function to select one of the sections
+
+    - Competitions this week
+    - Upcoming competitions
+    - Finished competitions
+
+    from the main menu of live.swimify.com.
+
+    Input:
+        wait: active selenium.webdriver.WebdriverWait object
+    
+    Return:
+        html clickable div element of section of choice
+        index 1,2 or 3 of the section of choice
+    '''
     ##____ Find sections "Competitions This Week", "Upcoming Competitions" and "Finished Competititons"  ____##
 
     # Define the CSS selector for section div elements
@@ -56,11 +104,22 @@ def select_section(wait):
         title_elements.append(title_element)
         print(f'\t{i + 1} ' + title_element)
 
-    index = choice_index(title_elements)
+    index = _choice_index(title_elements)
     selected_section = competition_section_divs[index]
     return selected_section, index + 1
 
-def select_competition(driver, wait, section, index):
+def select_competition(driver, section, index):
+    '''
+    Function to find all competitions in a given section and
+    allow input choice from the terminal to select a competition of interest.
+
+    Input:
+        driver: active selenium.webdriver object
+        section: clickable div eelement of chosen section
+
+    Return:
+        url of competition
+    '''
     ##____ Find all competitions in chosen section ____##
 
     # Define the CSS selector for competition clickable elements
@@ -89,11 +148,11 @@ def select_competition(driver, wait, section, index):
         print(f'\t{i + 1} ' + comp_title)
 
     ##____ Choose competition seciton depending on input ____##
-    choice = choice_index(competition_list)
+    choice = _choice_index(competition_list)
 
     # Get and click selected competition
     selected_competition = competition_list[choice]
-    competition_div_map[selected_competition].click()
+    html_renderer.click_element(driver, competition_div_map[selected_competition])
 
     print("Found Competition URL: " + driver.current_url)
 

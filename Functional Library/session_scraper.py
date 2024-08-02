@@ -5,18 +5,43 @@ import driver_handler
 import html_renderer
 
 
+####______________________________________________________________________________________________________####
+
+'''
+
+The following serves as a library for finding information from sessions in a given Swimify competition
+
+'''
+
+####______________________________________________________________________________________________________####
+
 def run(url):
+    '''
+    Demo run of class. Takes the url of the Swimify competition
+    and runs through all essential functions of class
+
+    Input:
+        url: url adress of competition
+    '''
     ##____ Set up the Chrome WebDriver ____##
     driver, wait = driver_handler.setup_driver(url, 20)
     
     # Run selection method
-    select_session(driver, wait)
+    scrape_sessions(driver, wait)
 
     # Wait for closure
     driver.quit()
 
 
-def select_session(driver, wait):
+def scrape_sessions(driver, wait):
+    '''
+    Function for going through all sections in a Swimify competition and 
+    extract event information
+
+    Input:
+        driver: active selenium.webdriver object
+        active selenium.webdriver.WebdriverWait object 
+    '''
     ##____ Find and map sessions ____##
 
     # Define the CSS selector for session div elements
@@ -56,8 +81,8 @@ def select_session(driver, wait):
         print("\n" + key)
 
         # Click session div element and wait for webdriver to load session information
-        driver.execute_script("arguments[0].click();", session_map[key])
-        time.sleep(2)
+        html_renderer.click_element(driver, session_map[key])
+        time.sleep(1)
 
         # Load event schedule of session
         try:

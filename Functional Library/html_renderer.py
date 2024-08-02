@@ -1,8 +1,8 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import ElementNotInteractableException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 import time
 
 ####______________________________________________________________________________________________________####
@@ -15,16 +15,28 @@ To do this, the Pyhton Selenium library is used and adapted for the purpose.
 '''
 
 ####______________________________________________________________________________________________________####
-## Private methods
-
-####_____________________________________________________________________________________________________####
-## Public methods
 
 
+def click_element(driver, element):
+    '''
+    Public method to interact with clickable WebElement
 
-def find_element(wait: WebDriverWait, selector: str, selector_type=None):
+    Inputs:
+        driver: active selenium.webdriver object
+        element: interactable WebElement
+        
+    '''
+    try:
+        element.click()
+    except ElementNotInteractableException:
+        # Try scrolling into view and clicking again
+        driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        time.sleep(1)  # Small delay to allow scroll action to complete
+        element.click()
+
+def find_element(wait: WebDriverWait, selector: str, selector_type=None, wait_time=10):
     ''' 
-    Private method to find a specific html element in the webdrivers current state.
+    Public method to find a specific html element in the webdrivers current state.
 
     Inputs:
         driver: active selenium.webdriver object
@@ -35,26 +47,40 @@ def find_element(wait: WebDriverWait, selector: str, selector_type=None):
     Return:
         WebElement with specified selector
     '''
-    return wait.until(EC.presence_of_element_located((selector_type, selector)))
+    try:
+        element = wait.until(EC.presence_of_element_located((selector_type, selector)))
+        wait.until(EC.visibility_of(element))
+        return element
+    except TimeoutException as e:
+        print(f"TimeoutException: Element not found within {wait_time} seconds.")
+        print(f"Selector: {selector}")
+        print(f"Selector Type: {selector_type}")
+        
 
 def find_all_elements(wait: WebDriverWait, selector: str, selector_type=None):
     ''' 
-    Private method to find all specific html elements in the webdrivers current state.
+    Public method to find all specific html elements in the webdrivers current state.
 
     Inputs:
         driver: active selenium.webdriver object
         wait: selenium.webdriver.support.ui.WebDriverWait object
-        selector: String object to locate html element
+        selector: String object to locate html elements
         selector_type: selenium.webdriver.common.by.Literal object
 
     Return:
         List of WebElements with specified selector
     '''
-    return wait.until(EC.presence_of_all_elements_located((selector_type, selector)))
+    try:
+        elements = wait.until(EC.presence_of_all_elements_located((selector_type, selector)))
+        return elements
+    except TimeoutException as e:
+        print(f"TimeoutException: Element not found within {10} seconds.")
+        print(e.stacktrace)
+        return None
 
 def find_sub_element(parent, selector: str, selector_type=None):
     ''' 
-    Private method to find a specific html element in a parent html element in 
+    Public method to find a specific html element in a parent html element in 
     the webdrivers current state.
 
     Inputs:
@@ -70,7 +96,7 @@ def find_sub_element(parent, selector: str, selector_type=None):
 
 def find_all_sub_elements(parent, selector: str, selector_type=None):
     ''' 
-    Private method to find all specific html elements in a parent html element in 
+    Public method to find all specific html elements in a parent html element in 
     the webdrivers current state.
 
     Inputs:

@@ -1,14 +1,30 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 import time
 
+####______________________________________________________________________________________________________####
 
-def setup_driver(url, timeout):
+'''
+
+The following serves as a library for handling selenium.webdriver objects.
+
+'''
+
+####______________________________________________________________________________________________________####
+
+def setup_driver(url: str, timeout: float):
+    '''
+    Function for initializing webdriver and WebdriverWait objects.
+
+    Input:
+        url: string with url adress of webpage of interest
+        timeout: float object for maximal allowed time of loading
+
+    Return:
+        webdriver and webdriver wait objects
+    '''
     # Set up the Chrome WebDriver
     driver_options = Options()
     driver_options.add_argument("--headless=new")
