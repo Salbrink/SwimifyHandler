@@ -31,7 +31,7 @@ def setup_driver(url: str, timeout: float):
     driver = webdriver.Chrome(driver_options)
 
     driver.get(url) 
-    wait = WebDriverWait(driver, timeout)
+    wait = WebDriverWait(driver, timeout, ignored_exceptions=[TimeoutException, WebDriverException, ElementNotInteractableException])
     time.sleep(3)
 
     return driver, wait

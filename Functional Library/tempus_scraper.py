@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementNotInteractableException
 
 
 import driver_handler
@@ -117,6 +119,7 @@ def _search_section(wait, section_selector, section_selector_type, event_list):
 
     except Exception as e:
         print(f"An error occurred: {e}")
+        return {}
         return {}
     
 def print_PB(event_list, sc_map, lc_map):
