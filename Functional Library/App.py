@@ -46,7 +46,8 @@ def main():
 
     if is_swedish_club: print("\nTempus Open can be used\n")
 
-    swimmer_event_finder.load_swimmers_and_events(swimify_driver, swimify_wait, club_name)
+    swimmer_objects_map = swimmer_event_finder.load_swimmers_and_events(swimify_driver, swimify_wait, club_name)
+
 
     
 main()

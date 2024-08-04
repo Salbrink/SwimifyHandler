@@ -47,6 +47,8 @@ class Event:
             
         self._distance = self.find_distance(string, self._stroke, self._relay)
 
+        self._best_times = []
+
         if(("damer" in string.lower()) or ("women" in string.lower()) or ("flickor" in string.lower())):
             self._gender = "Damer"
         else:
@@ -68,6 +70,15 @@ class Event:
     @property
     def gender(self):
         return self._gender
+    
+    @property
+    def best_times(self):
+        return self._best_times
+    
+    @best_times.setter
+    def set_best_times(self, sc_time, lc_time):
+        self.best_times.append(sc_time)
+        self.best_times.append(lc_time)
     
     def to_string(self):
         return self._distance + " " + self._gender

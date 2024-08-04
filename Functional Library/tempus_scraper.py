@@ -90,7 +90,7 @@ def _search_section(wait, section_selector, section_selector_type, event_list):
         event_list: list of event_string names
 
     Return:
-        Kay-Value map with event name as key and time and date of personal best as value.
+        Key-Value map with event name as key and time and date of personal best as value.
     '''
     map = {}
     
@@ -119,7 +119,6 @@ def _search_section(wait, section_selector, section_selector_type, event_list):
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return {}
         return {}
     
 def print_PB(event_list, sc_map, lc_map):
@@ -164,7 +163,20 @@ def add_times_to_events(driver, wait, swimmer_object):
         return {}, {}
     html_renderer.click_element(driver, top_search)
 
+    ##____ In swimmer menu ____##
+    event_list = [e.distance for e in swimmer_object.events]
+    # Get map for short course PB's of events of interest
+    sc_map = _search_section(wait, "//h3[text()='Kortbana (25m)']", By.XPATH, event_list)
+
+    # Get map for long course PB's of events of interest
+    lc_map = _search_section(wait, "//h3[text()='Långbana (50m)']", By.XPATH, event_list)
+
     for event in swimmer_object.events:
         event_string = event.distance
+        event.set_best_times(sc_map[event_string], lc_map[event_string])
+        
+
+
+
 ## Test
 # run("https://www.tempusopen.se/index.php?r=Swimmer", swimmer.Swimmer("Ian", "Hangård", "Simklubben Sydsim"), ["25m fjärilsim", "1500m frisim", "100m ryggsim", "200m medley"])

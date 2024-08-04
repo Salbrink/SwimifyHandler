@@ -113,11 +113,4 @@ def _find_events(wait, swimmer_object):
 
 def _find_best_times(driver, wait, swimmer_object):
     driver.get("https://www.tempusopen.se/index.php?r=Swimmer")
-
-    events = swimmer_object.events
-
-    event_string_list = [e.distance for e in events]
-
-    
-
-    print(events)
+    tempus_scraper.add_times_to_events(driver, wait, swimmer_object)
