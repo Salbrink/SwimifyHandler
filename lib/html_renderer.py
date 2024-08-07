@@ -1,8 +1,9 @@
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
+from logging import debug, log
 import time
 
 ####______________________________________________________________________________________________________####
@@ -17,7 +18,7 @@ To do this, the Pyhton Selenium library is used and adapted for the purpose.
 ####______________________________________________________________________________________________________####
 
 
-def click_element(driver, element):
+def click_element(driver, element) -> None:
     '''
     Public method to interact with clickable WebElement
 
@@ -34,7 +35,7 @@ def click_element(driver, element):
         time.sleep(1)  # Small delay to allow scroll action to complete
         element.click()
 
-def find_element(wait: WebDriverWait, selector: str, selector_type=None, wait_time=10):
+def find_element(wait: WebDriverWait, selector: str, selector_type=None, wait_time=10) -> WebElement:
     ''' 
     Public method to find a specific html element in the webdrivers current state.
 
@@ -52,12 +53,12 @@ def find_element(wait: WebDriverWait, selector: str, selector_type=None, wait_ti
         wait.until(EC.visibility_of(element))
         return element
     except TimeoutException as e:
-        print(f"TimeoutException: Element not found within {wait_time} seconds.")
-        print(f"Selector: {selector}")
-        print(f"Selector Type: {selector_type}")
+        debug(f"TimeoutException: Element not found within {wait_time} seconds.")
+        debug(f"Selector: {selector}")
+        debug(f"Selector Type: {selector_type}")
         
 
-def find_all_elements(wait: WebDriverWait, selector: str, selector_type=None):
+def find_all_elements(wait: WebDriverWait, selector: str, selector_type=None) -> list[WebElement]:
     ''' 
     Public method to find all specific html elements in the webdrivers current state.
 
@@ -74,11 +75,11 @@ def find_all_elements(wait: WebDriverWait, selector: str, selector_type=None):
         elements = wait.until(EC.presence_of_all_elements_located((selector_type, selector)))
         return elements
     except TimeoutException as e:
-        print(f"TimeoutException: Element not found within {10} seconds.")
-        print(e.stacktrace)
+        debug(f"TimeoutException: Element not found within {10} seconds.")
+        debug(e.stacktrace)
         return None
 
-def find_sub_element(parent, selector: str, selector_type=None):
+def find_sub_element(parent, selector: str, selector_type=None) -> WebElement:
     ''' 
     Public method to find a specific html element in a parent html element in 
     the webdrivers current state.
@@ -94,7 +95,7 @@ def find_sub_element(parent, selector: str, selector_type=None):
     '''
     return parent.find_element(selector_type, selector)
 
-def find_all_sub_elements(parent, selector: str, selector_type=None):
+def find_all_sub_elements(parent, selector: str, selector_type=None) -> list[WebElement]:
     ''' 
     Public method to find all specific html elements in a parent html element in 
     the webdrivers current state.
@@ -110,7 +111,7 @@ def find_all_sub_elements(parent, selector: str, selector_type=None):
     '''
     return parent.find_elements(selector_type, selector)
 
-def get_all_strings(web_elements, selector: str, selector_type):
+def get_all_strings(web_elements, selector: str, selector_type) -> map:
     '''
     Finds all strings of interest in a list of web elements.
 
@@ -120,14 +121,12 @@ def get_all_strings(web_elements, selector: str, selector_type):
         selector_type: selenium.webdriver.common.by.Literal object
 
     Returns:
-        - List of all strings of interest
         - Dictionary where all strings are keys
           for respective web element
 
     '''
 
     ## Create list for all strings and key-value map for strings and web-elements
-    result_list = []
     result_dic  = {}
 
     ## Go through all web elements
@@ -142,10 +141,7 @@ def get_all_strings(web_elements, selector: str, selector_type):
             ## Retrieve wanted string from 
             string = specififc_element.text
 
-            ## Store wanted string in result_list
-            result_list.append(string)
-
             ## Set value web element as value to string key
             result_dic[string] = web_element
             
-    return result_list, result_dic
+    return result_dic

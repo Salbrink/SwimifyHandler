@@ -32,11 +32,8 @@ class swimify_handler():
 
     def get_finished_competitions() -> list[map]:
         pass
-    
-    def get_upcoming_competitions() -> list[map]:
-        pass
 
-    def get_competitions(section_selector: str) -> list[map]:
+    def get_upcoming_competitions() -> list[map]:
         pass
 
     def get_session_schedule(session_selector: str) -> list[event]:
