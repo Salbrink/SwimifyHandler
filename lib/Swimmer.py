@@ -44,7 +44,7 @@ class swimmer:
         self._swimmer_club = club_object
 
     def to_string(self) -> str:
-        return self._first_name + " " + self._last_name + " " + self._club
+        return self._first_name + " " + self._last_name + " " + self.swimmer_club.club_name
     
     @property
     def events(self) -> list[event]:
@@ -54,5 +54,7 @@ class swimmer:
     def events(self, event_list: list[event]) -> None:
         self._events = event_list
     
-    def add_event(self, event):
+    def add_event(self, event) -> None:
         self._events.append(event)
+
+        

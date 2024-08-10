@@ -29,6 +29,7 @@ def click_element(driver, element) -> None:
     '''
     try:
         element.click()
+        time.sleep(1)
     except ElementNotInteractableException:
         # Try scrolling into view and clicking again
         driver.execute_script("arguments[0].scrollIntoView(true);", element)
@@ -111,7 +112,7 @@ def find_all_sub_elements(parent, selector: str, selector_type=None) -> list[Web
     '''
     return parent.find_elements(selector_type, selector)
 
-def get_all_strings(web_elements, selector: str, selector_type) -> map:
+def string_web_element_map(web_elements, selector: str, selector_type) -> map:
     '''
     Finds all strings of interest in a list of web elements.
 

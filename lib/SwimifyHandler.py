@@ -5,6 +5,7 @@ from Club import club
 from Competition import competition
 from Event import event
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from Session import session
@@ -45,21 +46,25 @@ club_div_selector = 'div.MuiBox-root.css-1eukt2p'
 last_club_div_selector = 'div.MuiBox-root.css-1fis6zz' # Do not know why this is different
 club_name_p_selector = 'p.MuiTypography-root.MuiTypography-body1.MuiTypography-noWrap.css-1bpwwm7'
 
-class swimify_handler():
+swimmer_div_selector = 'div.MuiGrid-root.MuiGrid-container.MuiGrid-item.css-1hbn5fk'
+swimmer_name_p_selector = 'p.MuiTypography-root.MuiTypography-body1.MuiTypography-noWrap.css-lc08jz'
 
-    active_competition = None
+swimmer_event_div_selector = 'div.MuiGrid-root.MuiGrid-container.MuiGrid-item.css-h9dk79'
+swimmer_event_name_div_selector = 'div.MuiBox-root.css-2ijh4t > p.MuiTypography-root.MuiTypography-body1.css-151uy7p'
+
+class swimify_handler():
 
     def __init__(self, wait_time: float) -> None:
         self._driver, self._wait = driver_handler.setup_driver(swimify_url, wait_time)
         self._competition_sections =  html_renderer.find_all_elements(self._wait, competition_section_div_selector, By.CSS_SELECTOR)
         
     def get_competitions_this_week(self) -> list[competition]:
-       
         competitions = []
+
         competition_div_list = html_renderer.find_all_sub_elements(self._competition_sections[0],\
                                     competitions_this_week_div_selector, By.CSS_SELECTOR)
         
-        competition_div_map = html_renderer.get_all_strings(competition_div_list, \
+        competition_div_map = html_renderer.string_web_element_map(competition_div_list, \
                                 competition_title_p_selector, By.CSS_SELECTOR)
         
         for competition_name, competition_div in competition_div_map.items():
@@ -69,10 +74,11 @@ class swimify_handler():
 
     def get_finished_competitions(self) -> list[competition]:
         competitions = []
+
         competition_div_list = html_renderer.find_all_sub_elements(self._competition_sections[2],\
                                     finished_competitions_div_selector, By.CSS_SELECTOR)
         
-        competition_div_map = html_renderer.get_all_strings(competition_div_list, \
+        competition_div_map = html_renderer.string_web_element_map(competition_div_list, \
                                 competition_title_p_selector, By.CSS_SELECTOR)
         
         for competition_name, competition_div in competition_div_map.items():
@@ -82,10 +88,11 @@ class swimify_handler():
 
     def get_upcoming_competitions(self) -> list[competition]:
         competitions = []
+
         competition_div_list = html_renderer.find_all_sub_elements(self._competition_sections[1],\
                                     upcoming_competitions_div_selector, By.CSS_SELECTOR)
         
-        competition_div_map = html_renderer.get_all_strings(competition_div_list, \
+        competition_div_map = html_renderer.string_web_element_map(competition_div_list, \
                                 competition_title_p_selector, By.CSS_SELECTOR)
         
         for competition_name, competition_div in competition_div_map.items():
@@ -95,7 +102,6 @@ class swimify_handler():
     
     def select_competition(self, competition_to_select: competition) -> str:
         html_renderer.click_element(self._driver, competition_to_select.div_element)
-        active_competition = competition
         return self._driver.current_url
 
 
@@ -116,8 +122,9 @@ class swimify_handler():
 
     def get_session_schedule(self, selected_session: session) -> list[event]:
         events = []
+
         html_renderer.click_element(self._driver, selected_session.div_element)
-        time.sleep(1)
+
         event_web_elements = html_renderer.find_all_elements(self._wait, event_XPATH, By.XPATH)
 
         for event_web_element in event_web_elements:
@@ -129,6 +136,7 @@ class swimify_handler():
 
     def get_all_clubs(self) -> list[club]:
         clubs = []
+
         html_renderer.click_element(self._driver, \
             html_renderer.find_element(self._wait, swimmers_button_XPATH, By.XPATH))
         club_divs = html_renderer.find_all_elements(self._wait, club_div_selector, By.CSS_SELECTOR)
@@ -140,42 +148,84 @@ class swimify_handler():
             
         return clubs
 
-    def get_swimmers() -> list[swimmer]:
-        #TODO
-        pass
+    def select_club(self, selected_club: club) -> str:
+        html_renderer.click_element(self._driver, selected_club.div_element)
+        return self._driver.current_url
 
-    def get_swimmer_events(swimmer) -> list[event]:
-        #TODO
-        pass
+
+    def get_all_swimmers(self, selected_club: club) -> list[swimmer]:
+        swimmers = []
+
+        swimmer_divs = html_renderer.find_all_elements(self._wait, swimmer_div_selector, By.CSS_SELECTOR)
+        swimmer_div_map = html_renderer.string_web_element_map(swimmer_divs, swimmer_name_p_selector, By.CSS_SELECTOR)
+
+        for swimmer_name, swimmer_div in swimmer_div_map.items():
+            try:
+                first_name, last_name = swimmer_name.split(' ', 1)
+                swimmers.append(swimmer(first_name, last_name, selected_club, div_element=swimmer_div))
+            except ValueError:
+                print("Found entry that is not parsed as swimmer")
+
+        return swimmers
+
+    def get_swimmer_events(self, selected_swimmer: swimmer) -> list[event]:
+        events = []
+       
+        html_renderer.click_element(self._driver, selected_swimmer.div_element)
+
+        event_divs = html_renderer.find_all_elements(self._wait, swimmer_event_div_selector, By.CSS_SELECTOR)
+
+        if event_divs is None:
+            return events
+        
+        for event_div in event_divs:
+            event_name = ''.join(html_renderer.find_sub_element(event_div, swimmer_event_name_div_selector, By.CSS_SELECTOR).text)
+            events.append(event(event_name))
+
+        return events
 
     @property
     def driver(self) -> webdriver:
         return self._driver
+    
+    @property
+    def wait(self) -> WebDriverWait:
+        return self._wait
 
-import time
-handler = swimify_handler(10)
 
-finished_competitions = handler.get_finished_competitions()
+# # Some testing material
+# handler = swimify_handler(10)
 
-for f in finished_competitions:
-    print(f.competition_name)
-url = handler.select_competition(finished_competitions[19])
+# finished_competitions = handler.get_finished_competitions()
 
-print(handler.driver.current_url)
-session_list = handler.get_all_sessions()
+# for f in finished_competitions:
+#     print(f.competition_name)
+# url = handler.select_competition(finished_competitions[19])
 
-print(session_list)
-for s in session_list:
-    print(s.name + '|' + s.time)
+# print(handler.driver.current_url)
+# session_list = handler.get_all_sessions()
 
-    e_list = handler.get_session_schedule(s)
+# for s in session_list:
+#     print(s.name + '|' + s.time)
 
-    for e in e_list:
-        try:
-            print(e.event_name)
-        except AttributeError:
-            print("Not an event")
-clubs = handler.get_all_clubs()
+#     e_list = handler.get_session_schedule(s)
 
-for c in clubs:
-    print(club.club_name)
+#     for e in e_list:
+#         try:
+#             print(e.event_name + e.start_time)
+#         except AttributeError:
+#             print("Not an event")
+# clubs = handler.get_all_clubs()
+
+# for c in clubs:
+#     print(c.club_name)
+
+# club_url = handler.select_club(clubs[0])
+# print(club_url)
+
+# swimmer_list = handler.get_all_swimmers(clubs[0])
+# for s in swimmer_list:
+#     s.events = handler.get_swimmer_events(s)
+#     print(s.to_string())
+#     for e in s.events:
+#         print(e.event_name)
