@@ -13,7 +13,7 @@ class club:
         return self._club_name
     
     @club_name.setter
-    def club_name(self, name: str):
+    def club_name(self, name: str) -> None:
         self._club_name = name
 
     @property

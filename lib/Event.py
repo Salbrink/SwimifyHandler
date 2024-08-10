@@ -35,6 +35,8 @@ events_english = []
 class event:
 
     def __init__(self, event_name, language='Swedish', start_time=None) -> None:
+        self._event_name = None # Initialize to avoid AttributeError
+
         if language=='Swedish':
 
             if ('damer' in event_name) or ('flickor' in event_name):
@@ -44,8 +46,11 @@ class event:
             for event in events_swedish:
                 if event in event_name:
                     self._event_name = event
+                    break
+            if self._event_name is None:
+                self._event_name = event_name
         else:  
-            self._event_name = None
+            self._event_name = event_name
             self._gender = None
 
         self._entered_swimmers = []

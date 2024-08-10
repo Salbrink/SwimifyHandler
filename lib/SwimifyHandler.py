@@ -40,6 +40,11 @@ event_XPATH = "//a[@display='flex']"
 start_time_div_selector = 'div.MuiBox-root.css-z9ki6v > p'
 event_name_div_selector = 'div.MuiBox-root.css-6771j6 > p'
 
+swimmers_button_XPATH = '//button[.//p[contains(text(), "Swimmers")]]'
+club_div_selector = 'div.MuiBox-root.css-1eukt2p'
+last_club_div_selector = 'div.MuiBox-root.css-1fis6zz' # Do not know why this is different
+club_name_p_selector = 'p.MuiTypography-root.MuiTypography-body1.MuiTypography-noWrap.css-1bpwwm7'
+
 class swimify_handler():
 
     active_competition = None
@@ -122,15 +127,20 @@ class swimify_handler():
 
         return events
 
-    def get_club() -> club:
-        #TODO
-        pass
+    def get_all_clubs(self) -> list[club]:
+        clubs = []
+        html_renderer.click_element(self._driver, \
+            html_renderer.find_element(self._wait, swimmers_button_XPATH, By.XPATH))
+        club_divs = html_renderer.find_all_elements(self._wait, club_div_selector, By.CSS_SELECTOR)
+        club_divs.append(html_renderer.find_element(self._wait, last_club_div_selector, By.CSS_SELECTOR))
 
-    def get_all_clubs() -> list[club]:
-        #TODO
-        pass
+        for club_div in club_divs:
+            clubs.append(club(html_renderer.find_sub_element(club_div, club_name_p_selector, By.CSS_SELECTOR).text, \
+                div_element=club_div))
+            
+        return clubs
 
-    def get_swimmers(club) -> list[swimmer]:
+    def get_swimmers() -> list[swimmer]:
         #TODO
         pass
 
@@ -144,21 +154,28 @@ class swimify_handler():
 
 import time
 handler = swimify_handler(10)
-time.sleep(1)
+
 finished_competitions = handler.get_finished_competitions()
+
 for f in finished_competitions:
     print(f.competition_name)
 url = handler.select_competition(finished_competitions[19])
+
 print(handler.driver.current_url)
 session_list = handler.get_all_sessions()
+
 print(session_list)
 for s in session_list:
     print(s.name + '|' + s.time)
 
     e_list = handler.get_session_schedule(s)
-    print(len(e_list))
+
     for e in e_list:
         try:
             print(e.event_name)
         except AttributeError:
             print("Not an event")
+clubs = handler.get_all_clubs()
+
+for c in clubs:
+    print(club.club_name)
