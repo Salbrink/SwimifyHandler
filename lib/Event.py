@@ -1,4 +1,3 @@
-
 events_swedish = [
     "50m fjärilsim", 
     "100m fjärilsim", 
@@ -35,19 +34,22 @@ events_english = []
 
 class event:
 
-    def __init__(self, event_name, language='Swedish') -> None:
+    def __init__(self, event_name, language='Swedish', start_time=None) -> None:
         if language=='Swedish':
 
             if ('damer' in event_name) or ('flickor' in event_name):
                 self._gender = 'damer'
             else: 
-                self.gender = 'herrar'
+                self._gender = 'herrar'
             for event in events_swedish:
                 if event in event_name:
                     self._event_name = event
         else:  
             self._event_name = None
             self._gender = None
+
+        self._entered_swimmers = []
+        self._start_time = start_time
     
     def __eq__(self, other) -> bool:
         return self._event_name in other.event_name
@@ -67,5 +69,24 @@ class event:
     @gender.setter
     def gender(self, gender: str) -> None:
         self._gender = gender
+
+    @property 
+    def entered_swimmers(self) -> list:
+        return self._entered_swimmers
+    
+    @entered_swimmers.setter
+    def entered_swimmers(self, swimmer_list) -> None:
+        self._entered_swimmers = swimmer_list
+
+    @property
+    def start_time(self) -> str:
+        return self._start_time
+    
+    @start_time.setter
+    def start_time(self, time) -> None:
+        self._start_time = time
+    
+    def add_swimmer(self, swimmer_object) -> None:
+        self._entered_swimmers.append(swimmer_object)
 
     

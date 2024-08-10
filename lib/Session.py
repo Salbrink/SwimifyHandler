@@ -3,10 +3,11 @@ from selenium.webdriver.remote.webelement import WebElement
 
 class session:
 
-    def __init__(self, events: list[event], name: str, schedule=None, div_element=None) -> None:
+    def __init__(self, name: str, time: str, events=None, schedule=None, div_element=None) -> None:
         self._events = events
         self._div_element = div_element
         self._name = name
+        self._time = time
         self._schedule = schedule
     
     @property
@@ -21,10 +22,6 @@ class session:
     def events(self) -> list[event]:
         return self._events
     
-    @event.setter
-    def events(self, events: list[event]) -> None:
-        self._events = events
-
     @property
     def name(self) -> str:
         return self._name
@@ -33,6 +30,10 @@ class session:
     def name(self, name) -> None:
         self._name = name
 
+    @property
+    def time(self) -> str:
+        return self._time
+    
     @property
     def schedule(self) -> list[str]:
         return self._schedule

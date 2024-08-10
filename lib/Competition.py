@@ -3,12 +3,11 @@ from selenium.webdriver.remote.webelement import WebElement
 
 class competition:
 
-    def __init__(self, competition_name: str, swimmer_club, div_element=None) -> None:
+    def __init__(self, competition_name: str, div_element=None) -> None:
         
         self._competition_name = competition_name
         self._div_element = div_element
-        self._swimmer_club = swimmer_club
-        self._events = []
+        self._sessions = []
 
 
     @property
@@ -26,3 +25,10 @@ class competition:
     @div_element.setter
     def div_element(self, element: WebElement) -> None:
         self._div_element = element
+
+    @property
+    def sessions(self) -> list[session]:
+        return self._sessions
+    
+    def add_session(self, session_object: session) -> None:
+        self._sessions.append(session_object)
