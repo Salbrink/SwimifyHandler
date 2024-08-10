@@ -173,7 +173,9 @@ def add_times_to_events(driver, wait, swimmer_object):
 
     for event in swimmer_object.events:
         event_string = event.distance
-        event.set_best_times(sc_map[event_string], lc_map[event_string])
+        print('\n' + event_string + ' PB\'s:\n')
+        print(sc_map[event_string])
+        print(lc_map[event_string])
         
 
 

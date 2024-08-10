@@ -24,6 +24,10 @@ class Swimmer:
     @property
     def club(self):
         return self._club
+    
+    @property
+    def events(self):
+        return self._events
 
     @club.setter
     def club(self, value):

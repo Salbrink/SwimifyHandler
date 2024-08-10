@@ -80,8 +80,6 @@ def load_swimmers_and_events(driver, wait, selected_club: str):
                 tempus_driver, tempus_wait = driver_handler.setup_driver("https://www.tempusopen.se/index.php?r=Swimmer", 10)
 
                 _find_best_times(tempus_driver, tempus_wait, swimmer_object)
-                
-                swimmer_object.print_events()
 
             except Exception as e:
                 print(f"\tNo entries found. Error {e}")

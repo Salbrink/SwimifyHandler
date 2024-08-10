@@ -98,7 +98,6 @@ def select_section(wait):
 
     print("\nSelect section:")
     for i, comp_sec in enumerate(competition_section_divs):
-        print(type(comp_sec))
         # Get and store the title string
         title_element = html_renderer.find_sub_element(comp_sec, title_element_selector, By.CSS_SELECTOR).text
         title_elements.append(title_element)
@@ -159,4 +158,4 @@ def select_competition(driver, section, index):
     return driver.current_url
 
 ## Test
-# run("https://live.swimify.com")
+run("https://live.swimify.com")
