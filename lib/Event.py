@@ -33,10 +33,9 @@ events_swedish = [
 events_english = []
 
 class event:
-
     def __init__(self, event_name, language='Swedish', start_time=None) -> None:
         self._event_name = None # Initialize to avoid AttributeError
-
+        event_name = event_name.lower()
         if language=='Swedish':
 
             if ('damer' in event_name) or ('flickor' in event_name):
@@ -57,7 +56,13 @@ class event:
         self._start_time = start_time
     
     def __eq__(self, other) -> bool:
-        return self._event_name in other.event_name
+        if not isinstance(other, event):
+            return False
+        return self._event_name == other.event_name and self._gender == other.gender
+
+    def __hash__(self) -> int:
+        # Combine the hashes of the event_name and gender attributes
+        return hash((self._event_name, self._gender))
     
     @property
     def event_name(self) -> str:
@@ -93,5 +98,3 @@ class event:
     
     def add_swimmer(self, swimmer_object) -> None:
         self._entered_swimmers.append(swimmer_object)
-
-    

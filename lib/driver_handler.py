@@ -33,7 +33,7 @@ def setup_driver(url: str, timeout: float):
 
     driver.get(url) 
     wait = WebDriverWait(driver, timeout, ignored_exceptions=[TimeoutException, WebDriverException, ElementNotInteractableException])
-    time.sleep(1)
+    time.sleep(2)
 
     return driver, wait
 

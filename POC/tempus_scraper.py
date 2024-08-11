@@ -6,6 +6,7 @@ from selenium.common.exceptions import ElementNotInteractableException
 
 import driver_handler
 import html_renderer
+import swimmer
 
 
 ####______________________________________________________________________________________________________####
@@ -181,4 +182,4 @@ def add_times_to_events(driver, wait, swimmer_object):
 
 
 ## Test
-# run("https://www.tempusopen.se/index.php?r=Swimmer", swimmer.Swimmer("Ian", "Hangård", "Simklubben Sydsim"), ["25m fjärilsim", "1500m frisim", "100m ryggsim", "200m medley"])
+run("https://www.tempusopen.se/index.php?r=Swimmer", swimmer.Swimmer("Ian", "Hangård", "Simklubben Sydsim"), ["25m fjärilsim", "1500m frisim", "100m ryggsim", "200m medley"])
