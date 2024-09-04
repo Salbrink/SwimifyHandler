@@ -10,6 +10,3 @@ if __name__ == "__main__":
 
     pbs_hanna = tempus_open.get_swimmer("Hanna")
     print(pbs_hanna)
-
-
-
