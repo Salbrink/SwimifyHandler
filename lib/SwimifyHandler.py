@@ -29,7 +29,7 @@ live.swimify.com and www.tempusopen.se.
 
 swimify_url = "https://live.swimify.com"
 
-tempus_url = "https://www.tempusopen.se/index.php?r=Swimmer"
+tempus_url = "https://www.tempusopen.se/swimmers"
 
 competition_section_div_selector = 'div[class^="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 "]'
 competitions_this_week_div_selector = 'div[class^="MuiBox-root css-"][role="article"][aria-labelledby^="competition-title-"]'
@@ -192,6 +192,7 @@ class swimify_handler():
 
         return events
     
+    ## Not working due to new formating of tempus
     def get_swimmer_personal_bests(self, selected_swimmer: swimmer) -> list[map]:
         personal_bests = []
 
@@ -292,44 +293,44 @@ class swimify_handler():
         return self._wait
 
 
-# Some basic testing material
-handler = swimify_handler(10)
+# # Some basic testing material
+# handler = swimify_handler(10)
 
-finished_competitions = handler.get_finished_competitions()
+# finished_competitions = handler.get_finished_competitions()
 
-while len(finished_competitions) == 0:
-    print("No finished competitions found, retrying:")
-    finished_competitions = handler.get_finished_competitions()
+# while len(finished_competitions) == 0:
+#     print("No finished competitions found, retrying:")
+#     finished_competitions = handler.get_finished_competitions()
 
-for f in finished_competitions:
-    print(f.competition_name)
-url = handler.select_competition(finished_competitions[19])
+# for f in finished_competitions:
+#     print(f.competition_name)
+# url = handler.select_competition(finished_competitions[19])
 
-print(handler.driver.current_url)
-session_list = handler.get_all_sessions()
+# print(handler.driver.current_url)
+# session_list = handler.get_all_sessions()
 
-for s in session_list:
-    print(s.name + '|' + s.time)
+# for s in session_list:
+#     print(s.name + '|' + s.time)
 
-    e_list = handler.get_session_schedule(s)
+#     e_list = handler.get_session_schedule(s)
 
-    for e in e_list:
-        try:
-            print(e.event_name + ' ' + e.start_time)
-        except AttributeError:
-            print("Not an event")
-clubs = handler.get_all_clubs()
+#     for e in e_list:
+#         try:
+#             print(e.event_name + ' ' + e.start_time)
+#         except AttributeError:
+#             print("Not an event")
+# clubs = handler.get_all_clubs()
 
-for c in clubs:
-    print(c.club_name)
+# for c in clubs:
+#     print(c.club_name)
 
-club_url = handler.select_club(clubs[9])
-print(club_url)
+# club_url = handler.select_club(clubs[9])
+# print(club_url)
 
-swimmer_list = handler.get_all_swimmers(clubs[9])
-for s in swimmer_list:
-    s.events = handler.get_swimmer_events(s)
-    print(s.to_string())
-    for e in s.events:
-        print(e.event_name)
-    print(handler.get_swimmer_personal_bests(s))
+# swimmer_list = handler.get_all_swimmers(clubs[9])
+# for s in swimmer_list:
+#     s.events = handler.get_swimmer_events(s)
+#     print(s.to_string())
+#     for e in s.events:
+#         print(e.event_name)
+#     print(handler.get_swimmer_personal_bests(s))
