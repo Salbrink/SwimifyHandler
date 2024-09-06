@@ -4,6 +4,7 @@ import urllib.request
 
 from bs4 import BeautifulSoup
 from enum import Enum
+from pathlib import Path
 
 TEMPUS_URL = "https://www.tempusopen.se"
 TEMPUS_SWIMMER = TEMPUS_URL + "/swimmers/{0}/swimming"
@@ -18,13 +19,15 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.8",
     "Connection": "keep-alive",
 }
-
+# Path setup
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path("p4.json")
 
 class TempusOpen:
     team = {}
 
     # Load team from file
-    with open("p4.json") as f:
+    with open(ASSETS_PATH) as f:
         team = json.load(f)
         f.close()
 

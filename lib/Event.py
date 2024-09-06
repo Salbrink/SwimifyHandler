@@ -30,7 +30,37 @@ events_swedish = [
     "4x200m frisim",
 ]
 
-events_english = []
+events_english = [
+    "50m butterfly", 
+    "100m butterfly", 
+    "200m butterfly", 
+
+    "50m backstroke", 
+    "100m backstroke", 
+    "200m backstroke", 
+
+    "50m breaststroke", 
+    "100m breaststroke", 
+    "200m breaststroke",
+
+    "50m freestyle",
+    "100m freestyle",
+    "200m freestyle",
+    "400m freestyle",
+    "800m freestyle",
+    "1500m freestyle",
+
+    "100m medley",
+    "200m medley",
+    "400m medley",
+
+    "4x50m medley",
+    "4x100m medley",
+
+    "4x50m freestyle",
+    "4x100m freestyle",
+    "4x200m freestyle",
+]
 
 class event:
     def __init__(self, event_name, language='Swedish', start_time=None) -> None:
@@ -38,14 +68,21 @@ class event:
         event_name = event_name.lower()
         if language=='Swedish':
 
-            if ('damer' in event_name) or ('flickor' in event_name):
+            if ('damer' in event_name) or ('flickor' in event_name) or ('women' in event_name) or ('woman' in event_name):
                 self._gender = 'damer'
             else: 
                 self._gender = 'herrar'
+
             for event in events_swedish:
                 if event in event_name:
                     self._event_name = event
                     break
+
+            for index, event in enumerate(events_english):
+                if event in event_name:
+                    self._event_name = events_swedish[index]
+                    break
+
             if self._event_name is None:
                 self._event_name = event_name
         else:  

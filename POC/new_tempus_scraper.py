@@ -7,7 +7,7 @@ import html_renderer
 import time
 
 # Set up the Selenium WebDriver (assuming you have downloaded the Chrome WebDriver)
-driver, wait = driver_handler.setup_driver("https://www.tempusopen.se/swimmers", 10)
+driver, wait = driver_handler.setup_driver("https://www.tempusopen.se/swimmers", 20)
 
 # driver = driver = webdriver.Chrome() 
 # driver.get("https://www.tempusopen.se/swimmers")
@@ -43,11 +43,11 @@ short_course_times = {}
 long_course_times = {}
 time.sleep(5)
 # Find the div element that contains the "Kortbana (25m)" table using CSS Selector
-div_list = html_renderer.find_all_elements(wait, "div > h5.font-semibold.text-xl.mb-2", By.CSS_SELECTOR)
+[sc, lc] = html_renderer.find_all_elements(wait, "div > h5.font-semibold.text-xl.mb-2", By.CSS_SELECTOR)
 
 # Check if the header is "Kortbana (25m)" and select the parent div
-if div_list[0].text == "Kortbana (25m)":
-    parent_div = div_list[0].find_element(By.XPATH, "./..")  # Select the parent <div> of the <h5>
+if sc.text == "Kortbana (25m)":
+    parent_div = sc.find_element(By.XPATH, "./..")  # Select the parent <div> of the <h5>
     
     # Find all <tr> elements inside the table within this div
     rows = parent_div.find_elements(By.CSS_SELECTOR, "tr.even\\:bg-gray-50, tr.odd\\:bg-white")
@@ -69,8 +69,8 @@ else:
     print("Kortbana (25m) section not found!")
 
 # Check if the header is "Långbana (50m)" and select the parent div
-if div_list[1].text == "Långbana (50m)":
-    parent_div = div_list[1].find_element(By.XPATH, "./..")  # Select the parent <div> of the <h5>
+if lc.text == "Långbana (50m)":
+    parent_div = lc.find_element(By.XPATH, "./..")  # Select the parent <div> of the <h5>
     
     # Find all <tr> elements inside the table within this div
     rows = parent_div.find_elements(By.CSS_SELECTOR, "tr.even\\:bg-gray-50, tr.odd\\:bg-white")
@@ -82,9 +82,11 @@ if div_list[1].text == "Långbana (50m)":
         # Find the first <td> and fourth <td> for 'Sample string' and 'Sample time'
         sample_string = row.find_element(By.CSS_SELECTOR, "td:nth-child(1)").text
         sample_time = row.find_element(By.CSS_SELECTOR, "td:nth-child(4)").text
-
-        # Append as tuple to the list
-        data_list.append((sample_string, sample_time))
+        sample_date = row.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
+        sample = row.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
+        print(row.text)
+        # Append as list to the list
+        data_list.append([sample_string, sample_time, sample_date, sample])
 
     # Print the list of tuples
     print(data_list)
