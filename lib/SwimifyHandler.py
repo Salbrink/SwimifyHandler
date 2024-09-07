@@ -226,7 +226,10 @@ class swimify_handler():
         # Find the "Visa" link inside the first <tr> and click it
         visa_link = html_renderer.find_sub_element(top_search, ".//a[@class='text-tempus-dark-blue']", By.XPATH)
         html_renderer.click_element(self._driver, visa_link)
-        
+
+        selected_swimmer.tempus_url = self._tempus_driver.current_url
+        print(selected_swimmer.tempus_url)
+
         event_name_list = [e.event_name for e in selected_swimmer.events]
         print(event_name_list)
 
@@ -307,8 +310,8 @@ class swimify_handler():
 # Some basic testing material
 handler = swimify_handler(10)
 
-
 finished_competitions = handler.get_finished_competitions()
+
 
 while len(finished_competitions) == 0:
     print("No finished competitions found, retrying:")

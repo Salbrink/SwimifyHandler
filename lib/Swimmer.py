@@ -9,6 +9,7 @@ class swimmer:
         self._last_name = last_name
         self._swimmer_club = swimmer_club
         self._events = []
+        self._tempus_url = None
 
 
     @property
@@ -57,4 +58,10 @@ class swimmer:
     def add_event(self, event) -> None:
         self._events.append(event)
 
-        
+    @property
+    def tempus_url(self):
+        return self._tempus_url
+    
+    @tempus_url.setter
+    def tempus_url(self, tempus_url):
+        self._tempus_url = tempus_url

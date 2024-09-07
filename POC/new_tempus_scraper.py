@@ -84,7 +84,6 @@ if lc.text == "Långbana (50m)":
         sample_time = row.find_element(By.CSS_SELECTOR, "td:nth-child(4)").text
         sample_date = row.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
         sample = row.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
-        print(row.text)
         # Append as list to the list
         data_list.append([sample_string, sample_time, sample_date, sample])
 
