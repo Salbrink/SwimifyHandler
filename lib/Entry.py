@@ -23,10 +23,14 @@ class entry_list:
         start_time = current_event.start_time
         for swimmer in current_event.entered_swimmers:
             name = swimmer.first_name + ' ' + swimmer.last_name
-            personal_best_information = swimmer.find_event_times(event_name)
-            sc_info = personal_best_information[0]
-            lc_info = personal_best_information[1]
-            self.entries.append(entry(name, sc_info[0], lc_info[0], event_name, start_time))
+            try: 
+                personal_best_information = swimmer.find_event_times(event_name)
+                sc_info = personal_best_information[0]
+                lc_info = personal_best_information[1]
+                self.entries.append(entry(name, sc_info[0], lc_info[0], event_name, start_time))
+            except TypeError:
+                debug("Personal bests not found in entries")
+                self.entries.append(entry(name, '00:00.00', '00:00.00', event_name, start_time))
 
     @property
     def entries(self):
