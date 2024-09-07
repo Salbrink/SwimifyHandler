@@ -22,6 +22,10 @@ class session:
     def events(self) -> list[event]:
         return self._events
     
+    @events.setter
+    def events(self, event_list) -> None:
+        self._events = event_list
+    
     @property
     def name(self) -> str:
         return self._name

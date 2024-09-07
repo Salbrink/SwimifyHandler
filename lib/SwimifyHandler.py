@@ -200,16 +200,17 @@ class swimify_handler():
         self._tempus_driver.get(tempus_url)
         while True:
             try:
-                first_name = html_renderer.find_element(self._tempus_wait, "first_name", By.NAME)
-                first_name.send_keys(selected_swimmer.first_name)
+                first_name_text_box = html_renderer.find_element(self._tempus_wait, "first_name", By.NAME)
+                first_name_text_box.send_keys(selected_swimmer.first_name)
 
-                last_name  = html_renderer.find_element(self._tempus_wait, "last_name", By.NAME)
-                last_name.send_keys(selected_swimmer.last_name)
+                last_name_text_box  = html_renderer.find_element(self._tempus_wait, "last_name", By.NAME)
+                last_name_text_box.send_keys(selected_swimmer.last_name)
                 
-                club_name  = html_renderer.find_element(self._tempus_wait, "club", By.NAME)
-                club_name.send_keys(selected_swimmer.swimmer_club.club_name)
+                club_name_text_box  = html_renderer.find_element(self._tempus_wait, "club", By.NAME)
+                club_name_text_box.send_keys(selected_swimmer.swimmer_club.club_name)
 
                 search_button = html_renderer.find_element(self._tempus_wait, tempus_search_button_XPATH, By.XPATH)
+
                 html_renderer.click_element(self._tempus_driver, search_button)
                 break
             except AttributeError:
@@ -228,26 +229,27 @@ class swimify_handler():
         html_renderer.click_element(self._driver, visa_link)
 
         selected_swimmer.tempus_url = self._tempus_driver.current_url
-        print(selected_swimmer.tempus_url)
 
         event_name_list = [e.event_name for e in selected_swimmer.events]
-        print(event_name_list)
 
         # Find the tables of "Kortbana (25m)" and "Långbana (50m)" as element 0 and 1 respectively in the 
         # returned list
         try:
-            [sc_table, lc_table] = html_renderer.find_all_elements(self.wait, tempus_table_div_selector, By.CSS_SELECTOR)
+            [sc_table, lc_table] = html_renderer.find_all_elements(self._tempus_wait, tempus_table_div_selector, By.CSS_SELECTOR)
         except TypeError:
             debug("Tables of Tempus not properly loaded")
             return personal_bests
 
+
         sc_map = self._search_tempus_table(self._tempus_wait, sc_table, event_name_list)
+
         lc_map = self._search_tempus_table(self._tempus_wait, lc_table, event_name_list)
-        
+
         for event_object in selected_swimmer.events:
             # List with type [Personal best time, Date of race, Competition]
             pb_list = []
             try: 
+                print()
                 pb_list.append(sc_map[event_object.event_name])
             except KeyError: 
                 pb_list.append('No personal best SCM')
@@ -256,7 +258,7 @@ class swimify_handler():
             except KeyError:
                 pb_list.append('No personal best LCM')
 
-            personal_bests.append({event_object : pb_list})
+            personal_bests.append({event_object.event_name : pb_list})
 
         return personal_bests
 
@@ -282,10 +284,10 @@ class swimify_handler():
             
             for row in rows:
                 #Find the first <td> and fourth <td> for 'Sample string' and 'Sample time'
-                event_name = row.find_element(By.CSS_SELECTOR, "td:nth-child(1)").text
+                event_name = row.find_element(By.CSS_SELECTOR, "td:nth-child(1)").text.lower()
 
                 # Check if the event name is in the predefined list
-                if event_name.lower() in event_name_list:
+                if event_name in event_name_list:
                     # Extract the date and time from the respective cells
                     event_comp = row.find_element(By.CSS_SELECTOR, "td:nth-child(2)").text
                     event_date = row.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text
@@ -307,45 +309,47 @@ class swimify_handler():
         return self._wait
 
 
-# Some basic testing material
-handler = swimify_handler(10)
+# # Some basic testing material
+# handler = swimify_handler(10)
 
-finished_competitions = handler.get_finished_competitions()
+# finished_competitions = handler.get_finished_competitions()
 
 
-while len(finished_competitions) == 0:
-    print("No finished competitions found, retrying:")
-    finished_competitions = handler.get_finished_competitions()
+# while len(finished_competitions) == 0:
+#     print("No finished competitions found, retrying:")
+#     finished_competitions = handler.get_finished_competitions()
 
-for f in finished_competitions:
-    print(f.competition_name)
-url = handler.select_competition(finished_competitions[6])
+# for f in finished_competitions:
+#     print(f.competition_name)
+# url = handler.select_competition(finished_competitions[6])
 
-print(handler.driver.current_url)
-session_list = handler.get_all_sessions()
+# print(handler.driver.current_url)
+# session_list = handler.get_all_sessions()
 
-for s in session_list:
-    print(s.name + '|' + s.time)
+# for s in session_list:
+#     print(s.name + '|' + s.time)
 
-    e_list = handler.get_session_schedule(s)
+#     e_list = handler.get_session_schedule(s)
 
-    for e in e_list:
-        try:
-            print(e.event_name + ' ' + e.start_time)
-        except AttributeError:
-            print("Not an event")
-clubs = handler.get_all_clubs()
+#     for e in e_list:
+#         try:
+#             print(e.event_name + ' ' + e.start_time)
+#         except AttributeError:
+#             print("Not an event")
 
-for c in clubs:
-    print(c.club_name)
+# clubs = handler.get_all_clubs()
 
-club_url = handler.select_club(clubs[0])
-print(club_url)
+# for c in clubs:
+#     print(c.club_name)
 
-swimmer_list = handler.get_all_swimmers(clubs[0])
-for s in swimmer_list:
-    s.events = handler.get_swimmer_events(s)
-    print(s.to_string())
-    for e in s.events:
-        print(e.event_name)
-    print(handler.get_swimmer_personal_bests(s))
+# club_url = handler.select_club(clubs[0])
+# print(club_url)
+
+# swimmer_list = handler.get_all_swimmers(clubs[0])
+# for s in swimmer_list:
+#     s.events = handler.get_swimmer_events(s)
+#     print(s.to_string())
+#     for e in s.events:
+#         print(e.event_name)
+#     print("Here it is:")
+#     print(handler.get_swimmer_personal_bests(s))

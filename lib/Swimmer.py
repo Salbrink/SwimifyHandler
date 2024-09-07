@@ -10,6 +10,7 @@ class swimmer:
         self._swimmer_club = swimmer_club
         self._events = []
         self._tempus_url = None
+        self._personal_bests = None
 
 
     @property
@@ -57,6 +58,20 @@ class swimmer:
     
     def add_event(self, event) -> None:
         self._events.append(event)
+
+    @property
+    def personal_bests(self) -> list[map]:
+        return self._personal_bests
+    
+    @personal_bests.setter
+    def personal_bests(self, personal_bests: list[map]):
+        self._personal_bests = personal_bests
+
+    def find_event_times(self, event_name) -> list[str]:
+        for event_map in self._personal_bests:
+            if event_name in event_map.keys():
+                return event_map[event_name]
+        return None  # Return None if the event is not found
 
     @property
     def tempus_url(self):
