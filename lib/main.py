@@ -6,7 +6,9 @@ from logging import debug
 from Session import session
 from SwimifyHandler import swimify_handler
 
-import subprocess
+from Excel import ExcelSheet
+
+import subprocess, re
 
 LUKE_ENTRY_LIST = []
 
@@ -179,3 +181,16 @@ if __name__ == "__main__":
             printProgressBar(i + 1, nbr_events, prefix = 'Progress:', suffix = 'Complete', length = 50)
         subprocess.run('clear', shell=True)
 print(LUKE_ENTRY_LIST)
+
+excel_sheet = ExcelSheet()
+
+# Entries from Filps list are objects such as ["Name", "PB SC", "PB LC", "Event name", "Start time"]
+for e in LUKE_ENTRY_LIST:
+    name = e[0]
+    pb_sc = e[1]
+    pb_lc = e[2]
+    event_string = e[4] + ": " + e[3]
+    race = re.findall('\d{1,4}m', e[3])[0]
+    excel_sheet.save_one_swimmer(race, name, pb_sc, pb_lc, event_string)
+
+print("You can now find your Excel sheet as test.xlsx")
