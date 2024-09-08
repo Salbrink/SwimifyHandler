@@ -158,4 +158,4 @@ def select_competition(driver, section, index):
     return driver.current_url
 
 ## Test
-run("https://live.swimify.com")
+# run("https://live.swimify.com")
