@@ -1,51 +1,30 @@
-import json
 import re
-import urllib.request
 
-from bs4 import BeautifulSoup
+from get_my_html import GetMyHtml
 from enum import Enum
-from pathlib import Path
 
 TEMPUS_URL = "https://www.tempusopen.se"
 TEMPUS_SWIMMER = TEMPUS_URL + "/swimmers/{0}/swimming"
 TEMPUS_EVENT = TEMPUS_URL + "{0}/events/{1}"
 
-# Header gibberish that I have not investigated - needed otherwise 403 Forbidden...
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
-    "Accept-Encoding": "none",
-    "Accept-Language": "en-US,en;q=0.8",
-    "Connection": "keep-alive",
-}
-# Path setup
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("p4.json")
+REGEX_SWIM_TIME = '"swim_time":"\d{1,2}:\d{1,2}.\d{1,2}"'
+REGEX_EVENT_CODE = '"event_code":\d{1,2}'
+
 
 class TempusOpen:
-    team = {}
 
-    # Load team from file
-    with open(ASSETS_PATH) as f:
-        team = json.load(f)
-        f.close()
+    def __init__(self):
+        # Start an request helper
+        self.get_my_html = GetMyHtml()
 
-    def get_swimmer(self, name):
-        url = TEMPUS_SWIMMER.format(self.team[name])
+    def get_swimmer(self, tempus_id):
+        url = TEMPUS_SWIMMER.format(tempus_id)
 
-        # Assemble request and add headers where needed
-        request = urllib.request.Request(url, None, headers=HEADERS)
-        response = urllib.request.urlopen(request).read()
-
-        # Turn into beautiful soup and make it pretty
-        soup = BeautifulSoup(response, "html.parser").prettify()
+        resp = self.get_my_html.call_this_url(url)
 
         # Do a raw regex that gets the times and it's corresponding event code defined by tempus
-        times = [
-            t[13:-1] for t in re.findall('"swim_time":"\d{1,2}:\d{1,2}.\d{1,2}"', soup)
-        ]
-        codes = [int(c[13:]) for c in re.findall('"event_code":\d{1,2}', soup)]
+        times = [t[13:-1] for t in re.findall(REGEX_SWIM_TIME, resp)]
+        codes = [int(c[13:]) for c in re.findall(REGEX_EVENT_CODE, resp)]
 
         # Most ugly parsing possible of the extracted data above
         pbs = {}
