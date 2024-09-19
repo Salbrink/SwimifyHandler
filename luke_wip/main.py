@@ -23,6 +23,9 @@ if __name__ == "__main__":
     # Get a parser up and running
     parser = TempusParser()
 
+    # Add Levente as a nice touch for Sebbe
+    excel_sheet.save_one_swimmer('25m', 'Levente a király Nagy', '4:20.69', '4:20.69', '400m Ungersk Special')
+
     # Parse the pbs from tempus codes and add them to spreadsheet
     for entry in swimify_entries:
         pbs = club.swimmers[entry.entry_name].pbs
