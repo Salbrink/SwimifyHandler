@@ -12,7 +12,7 @@ if __name__ == "__main__":
     club = Group("hs")
 
     # Open and prepare excel sheet for export
-    ecxel_sheet = ExcelSheet()
+    excel_sheet = ExcelSheet()
 
     # Fetch competition events from swimify
     swimify = Swimify("swedish-swim-games-2024-grand-prix-2024-09-20")
@@ -28,7 +28,7 @@ if __name__ == "__main__":
         pbs = club.swimmers[entry.entry_name].pbs
         sheet, pb_sc, pb_lc = parser.parse_pbs(pbs, entry.event_name)
 
-        ecxel_sheet.save_one_swimmer(sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name)
+        excel_sheet.save_one_swimmer(sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name)
 
     time1 = time.time()
 
