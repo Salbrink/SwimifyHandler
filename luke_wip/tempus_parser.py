@@ -151,4 +151,4 @@ class TempusParser:
         except KeyError as e:
             print("We found a key error: ", e.what())
 
-        return None, None
+        return None, None, None

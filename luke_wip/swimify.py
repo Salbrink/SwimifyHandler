@@ -1,5 +1,6 @@
 import re
 
+from entry import Entry
 from requests_html import HTMLSession
 
 SWIMIFY_URL = "https://live.swimify.com/competitions/"
@@ -62,6 +63,6 @@ class Swimify:
                 entry_rank = s[2]
             elif s[3] != "":
                 entry_name = s[3]
-                entries.append([event_number, event_name, entry_rank, entry_name])
+                entries.append(Entry(event_number, event_name, entry_rank, entry_name))
 
         return entries

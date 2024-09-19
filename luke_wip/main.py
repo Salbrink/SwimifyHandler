@@ -1,7 +1,7 @@
 from excel import ExcelSheet
 from group import Group
 from swimify import Swimify
-from tempus import TempusParser
+from tempus_parser import TempusParser
 import time
 
 if __name__ == "__main__":
@@ -25,12 +25,10 @@ if __name__ == "__main__":
 
     # Parse the pbs from tempus codes and add them to spreadsheet
     for entry in swimify_entries:
-        event_name = entry[1]
-        name = entry[3]
-        pbs = club.swimmers[name].pbs
-        sheet, pb_sc, pb_lc = parser.parse_pbs(pbs, event_name)
+        pbs = club.swimmers[entry.entry_name].pbs
+        sheet, pb_sc, pb_lc = parser.parse_pbs(pbs, entry.event_name)
 
-        ecxel_sheet.save_one_swimmer(sheet, name, pb_sc, pb_lc, event_name)
+        ecxel_sheet.save_one_swimmer(sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name)
 
     time1 = time.time()
 
