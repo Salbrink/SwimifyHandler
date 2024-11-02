@@ -20,5 +20,6 @@ class GetMyHtml:
 
         # Turn into beautiful soup and make it pretty
         soup = BeautifulSoup(resp, "html.parser").prettify()
+        soup = soup.replace("&quot;", "\"")
 
         return soup
