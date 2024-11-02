@@ -148,7 +148,7 @@ class TempusParser:
                         pbs[TempusEvent.LC_1500_FREESTYLE.name],
                     )
 
-        except KeyError as e:
-            print("We found a key error: ", e.what())
+        except KeyError:
+            print("Personal best not found, return None")
 
-        return None, None, None
+        return "400m", None, None
