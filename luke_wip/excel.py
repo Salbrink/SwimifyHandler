@@ -5,10 +5,15 @@ from openpyxl.styles import Alignment
 
 class ExcelSheet:
 
-    def __init__(self) -> None:
+    def __init__(self, club_name, comp_name, comp_date) -> None:
         self.workbook = load_workbook("Template.xlsx")
         self.dst_sheet = self.workbook["Empty"]
         self.row_index = self.dst_sheet.max_row
+
+        # Add club name, competition name and competition date
+        self.dst_sheet["A1"] = club_name
+        self.dst_sheet["E1"] = comp_name
+        self.dst_sheet["E3"] = comp_date
 
     def save_one_swimmer(self, sheet, name, pb_sc, pb_lc, event):
         src_sheet = self.workbook[sheet]

@@ -6,15 +6,16 @@ from tempus import TempusOpen
 
 class Group:
 
-    def __init__(self, group):
+    def __init__(self, groups):
         self.swimmers = {}
         tempus_open = TempusOpen()
 
         # Load team from file
         self.team = {}
-        with open(group + ".json") as f:
-            self.team = json.load(f)
-            f.close()
+        for group in groups:
+            with open(group + ".json") as f:
+                self.team.update(json.load(f))
+                f.close()
 
         # Populate the group with swimmer objects
         for name in self.team:
