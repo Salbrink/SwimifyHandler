@@ -7,7 +7,7 @@ class ExcelSheet:
 
     def __init__(self, club_name, comp_name, comp_date) -> None:
         self.workbook = load_workbook("Template.xlsx")
-        self.dst_sheet = self.workbook["Empty"]
+        self.dst_sheet = self.workbook["Template"]
         self.row_index = self.dst_sheet.max_row
 
         # Add club name, competition name and competition date
@@ -77,5 +77,8 @@ class ExcelSheet:
     def save_wb(self):
         for col in range(ord('A'), ord('H') + 1):
             self.dst_sheet.column_dimensions[chr(col)].width = 9
+
+        for sheet in self.workbook.sheetnames[1:]:
+            del self.workbook[sheet]
 
         self.workbook.save(self.file_name)
