@@ -34,8 +34,19 @@ if __name__ == "__main__":
 
     # Parse the pbs from tempus codes and add them to spreadsheet
     for entry in swimify_entries:
-        pbs = club.swimmers[entry.entry_name].pbs
-        sheet, pb_sc, pb_lc = parser.parse_pbs(pbs, entry.event_name)
+        event_name = entry.event_name
+
+        try:
+            # Check if it is a relay
+            if "4x" in event_name:
+                sheet, pb_sc, pb_lc = parser.parse_pbs(None, event_name)
+            # Else check for personal bests
+            else:
+                pbs = club.swimmers[entry.entry_name].pbs
+                sheet, pb_sc, pb_lc = parser.parse_pbs(pbs, entry.event_name)
+        except KeyError:
+            print("Swimmer not in group: " + entry.entry_name)
+            continue
 
         excel_sheet.save_one_swimmer(sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name)
 
