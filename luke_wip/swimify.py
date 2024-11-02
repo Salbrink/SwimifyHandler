@@ -65,4 +65,7 @@ class Swimify:
                 entry_name = s[3]
                 entries.append(Entry(event_number, event_name, entry_rank, entry_name))
 
-        return entries
+        # Sort according to event_number and reverse rank
+        sorted_entries = sorted(entries, key = lambda x: (int(x.event_nbr), -1 * int(x.entry_rank)))
+
+        return sorted_entries
