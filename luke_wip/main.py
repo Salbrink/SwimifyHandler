@@ -18,7 +18,9 @@ if __name__ == "__main__":
     club = Group(config["groups"])
 
     # Open and prepare excel sheet for export
-    excel_sheet = ExcelSheet(config["club_name"], config["comp_name"], config["comp_date"])
+    excel_sheet = ExcelSheet(
+        config["club_name"], config["comp_name"], config["comp_date"]
+    )
 
     # Fetch competition events from swimify
     swimify = Swimify(config["comp_url"])
@@ -30,7 +32,7 @@ if __name__ == "__main__":
     parser = TempusParser()
 
     # Add Levente as a nice touch for Sebbe
-    excel_sheet.save_one_swimmer('25m', 'Levente a király Nagy', '4:20.69', '4:20.69', '400m Ungersk Special')
+    # excel_sheet.save_one_swimmer('25m', 'Levente a király Nagy', '4:20.69', '4:20.69', '400m Ungersk Special')
 
     # Parse the pbs from tempus codes and add them to spreadsheet
     for entry in swimify_entries:
@@ -48,7 +50,15 @@ if __name__ == "__main__":
             print("Swimmer not in group: " + entry.entry_name)
             continue
 
-        excel_sheet.save_one_swimmer(sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name)
+        # Print for simplicity with the correct format if manual manipulation is needed
+        print(
+            "['{0}', '{1}', '{2}', '{3}', '{4}']".format(
+                entry.entry_name, pb_sc, pb_lc, entry.event_name, sheet
+            )
+        )
+        excel_sheet.save_one_swimmer(
+            sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name
+        )
 
     time1 = time.time()
 

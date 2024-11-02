@@ -19,7 +19,7 @@ class TempusParser:
 
     def is_medley(self, event_name):
         return "medley" in event_name.lower()
-    
+
     def safe_get(self, pbs, race):
         if race in pbs:
             return pbs[race]
@@ -39,13 +39,29 @@ class TempusParser:
 
             elif "25m" in event_name:
                 if self.is_freestyle(event_name):
-                    return "25m", self.safe_get(pbs, TempusEvent.SC_25_FREESTYLE.name), None
+                    return (
+                        "25m",
+                        self.safe_get(pbs, TempusEvent.SC_25_FREESTYLE.name),
+                        None,
+                    )
                 elif self.is_breaststroke(event_name):
-                    return "25m", self.safe_get(pbs, TempusEvent.SC_25_BREASTSTROKE.name), None
+                    return (
+                        "25m",
+                        self.safe_get(pbs, TempusEvent.SC_25_BREASTSTROKE.name),
+                        None,
+                    )
                 elif self.is_backstroke(event_name):
-                    return "25m", self.safe_get(pbs, TempusEvent.SC_25_BACKSTROKE.name), None
+                    return (
+                        "25m",
+                        self.safe_get(pbs, TempusEvent.SC_25_BACKSTROKE.name),
+                        None,
+                    )
                 elif self.is_butterfly(event_name):
-                    return "25m", self.safe_get(pbs, TempusEvent.SC_25_BUTTERFLY.name), None
+                    return (
+                        "25m",
+                        self.safe_get(pbs, TempusEvent.SC_25_BUTTERFLY.name),
+                        None,
+                    )
 
             elif "50m" in event_name:
                 if self.is_freestyle(event_name):
@@ -99,7 +115,11 @@ class TempusParser:
                         self.safe_get(pbs, TempusEvent.LC_100_BUTTERFLY.name),
                     )
                 elif self.is_medley(event_name):
-                    return "100m", self.safe_get(pbs, TempusEvent.SC_100_INDIVIDUAL_MEDLEY.name), None
+                    return (
+                        "100m",
+                        self.safe_get(pbs, TempusEvent.SC_100_INDIVIDUAL_MEDLEY.name),
+                        None,
+                    )
 
             elif "200m" in event_name:
                 if self.is_freestyle(event_name):
