@@ -15,6 +15,9 @@ class ExcelSheet:
         self.dst_sheet["E1"] = comp_name
         self.dst_sheet["E3"] = comp_date
 
+        # Save filename for later
+        self.file_name = "{0} {1}.xlsx".format(comp_name, comp_date)
+
     def save_one_swimmer(self, sheet, name, pb_sc, pb_lc, event):
         src_sheet = self.workbook[sheet]
 
@@ -75,4 +78,4 @@ class ExcelSheet:
         for col in range(ord('A'), ord('H') + 1):
             self.dst_sheet.column_dimensions[chr(col)].width = 9
 
-        self.workbook.save("test.xlsx")
+        self.workbook.save(self.file_name)

@@ -1,5 +1,7 @@
 __pycache__/
 
-test.xlsx
+*.xlsx
 *.pdf
 *.json
+
+!Template.xlsx
