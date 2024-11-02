@@ -60,6 +60,8 @@ if __name__ == "__main__":
             sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name
         )
 
+    excel_sheet.save_wb()
+
     time1 = time.time()
 
     print("Time to fetch all swimmers and add to heat list: " + str(time1 - time0))

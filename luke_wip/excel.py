@@ -71,4 +71,8 @@ class ExcelSheet:
         self.dst_sheet[name_range_start].alignment = Alignment(horizontal="center")
         self.dst_sheet[event_range_start].alignment = Alignment(horizontal="center")
 
+    def save_wb(self):
+        for col in range(ord('A'), ord('H') + 1):
+            self.dst_sheet.column_dimensions[chr(col)].width = 9
+
         self.workbook.save("test.xlsx")
