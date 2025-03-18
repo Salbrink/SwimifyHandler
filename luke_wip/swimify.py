@@ -13,10 +13,11 @@ SWIMIFY_CLUB_EVENTS = SWIMIFY_CLUB + "/entries/events"
 EVENT_NUMBER = '"MuiTypography-root MuiTypography-body1 css-19rk9gv"'
 EVENT_NAME = '"MuiTypography-root MuiTypography-body1 css-1270wsa"'
 ENTRY_NAME = '"MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-lc08jz"'
+RES_NAME = '"MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-1y1s4zp"'
 ENTRY_RANK = '"MuiTypography-root MuiTypography-body1 css-9l3uo3"'
 
-COMBINATION = r"{0}>(\d+?)<|{1}>(.*?)<|{2}>(\d+?)<|{3}>(.*?)<".format(
-    EVENT_NUMBER, EVENT_NAME, ENTRY_RANK, ENTRY_NAME
+COMBINATION = r"{0}>(\d+?)<|{1}>(.*?)<|{2}>(.*?)<|{3}>(.*?)<|{4}>(.*?)<".format(
+    EVENT_NUMBER, EVENT_NAME, ENTRY_RANK, ENTRY_NAME, RES_NAME
 )
 
 
@@ -64,6 +65,11 @@ class Swimify:
             elif s[3] != "":
                 entry_name = s[3]
                 entries.append(Entry(event_number, event_name, entry_rank, entry_name))
+            elif s[4] != "":
+                entry_name = s[4]
+                entry_rank = 999 # Force slowest time for sorting
+                entries.append(Entry(event_number, event_name + " (RES)", entry_rank, entry_name))
+
 
         # Sort according to event_number and reverse rank
         sorted_entries = sorted(entries, key = lambda x: (int(x.event_nbr), -1 * int(x.entry_rank)))
