@@ -22,6 +22,10 @@ if __name__ == "__main__":
         config["club_name"], config["comp_name"], config["comp_date"]
     )
 
+    pb_sheet = ExcelSheet(
+        config["club_name"], config["comp_name"], config["comp_date"] + " PB"
+    )
+
     # Fetch competition events from swimify
     swimify = Swimify(config["comp_url"])
 
@@ -59,8 +63,12 @@ if __name__ == "__main__":
         excel_sheet.save_one_swimmer(
             sheet, entry.entry_name, pb_sc, pb_lc, entry.event_name
         )
+        pb_sheet.save_one_swimmer(
+            "PB", entry.entry_name, pb_sc, pb_lc, entry.event_name
+        )
 
     excel_sheet.save_wb()
+    pb_sheet.save_wb()
 
     time1 = time.time()
 
