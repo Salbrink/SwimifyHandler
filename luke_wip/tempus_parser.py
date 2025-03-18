@@ -1,24 +1,34 @@
 from tempus import TempusEvent
 
+FREESTYLE = ["freestyle", "frisim", "frisvømning"]
+BREASTSTROKE = ["breaststroke", "bröstsim", "brystsvømning"]
+BACKSTROKE = ["backstroke", "ryggsim", "rygsvømning"]
+BUTTERFLY = ["butterfly", "fjäril"]
+MEDLEY = ["medley"]
+
 
 class TempusParser:
     def __init__(self):
         pass
 
+    def stroke_check(self, event_name, matches):
+        event_name = event_name.lower()
+        return any([stroke in event_name for stroke in matches])
+
     def is_freestyle(self, event_name):
-        return "freestyle" in event_name.lower() or "frisim" in event_name.lower()
+        return self.stroke_check(event_name, FREESTYLE)
 
     def is_breaststroke(self, event_name):
-        return "breaststroke" in event_name.lower() or "bröstsim" in event_name.lower()
+        return self.stroke_check(event_name, BREASTSTROKE)
 
     def is_backstroke(self, event_name):
-        return "backstroke" in event_name.lower() or "ryggsim" in event_name.lower()
+        return self.stroke_check(event_name, BACKSTROKE)
 
     def is_butterfly(self, event_name):
-        return "butterfly" in event_name.lower() or "fjäril" in event_name.lower()
+        return self.stroke_check(event_name, BUTTERFLY)
 
     def is_medley(self, event_name):
-        return "medley" in event_name.lower()
+        return self.stroke_check(event_name, MEDLEY)
 
     def safe_get(self, pbs, race):
         if race in pbs:
