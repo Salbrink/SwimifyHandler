@@ -5,18 +5,10 @@ from openpyxl.styles import Alignment
 
 class ExcelSheet:
 
-    def __init__(self, club_name, comp_name, comp_date) -> None:
+    def __init__(self) -> None:
         self.workbook = load_workbook("Template.xlsx")
-        self.dst_sheet = self.workbook["Template"]
+        self.dst_sheet = self.workbook["Empty"]
         self.row_index = self.dst_sheet.max_row
-
-        # Add club name, competition name and competition date
-        self.dst_sheet["A1"] = club_name
-        self.dst_sheet["E1"] = comp_name
-        self.dst_sheet["E3"] = comp_date
-
-        # Save filename for later
-        self.file_name = "{0} {1}.xlsx".format(comp_name, comp_date)
 
     def save_one_swimmer(self, sheet, name, pb_sc, pb_lc, event):
         src_sheet = self.workbook[sheet]
@@ -74,11 +66,4 @@ class ExcelSheet:
         self.dst_sheet[name_range_start].alignment = Alignment(horizontal="center")
         self.dst_sheet[event_range_start].alignment = Alignment(horizontal="center")
 
-    def save_wb(self):
-        for col in range(ord('A'), ord('H') + 1):
-            self.dst_sheet.column_dimensions[chr(col)].width = 9
-
-        for sheet in self.workbook.sheetnames[1:]:
-            del self.workbook[sheet]
-
-        self.workbook.save(self.file_name)
+        self.workbook.save("test.xlsx")
